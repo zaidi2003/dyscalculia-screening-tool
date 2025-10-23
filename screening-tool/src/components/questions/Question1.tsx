@@ -1,8 +1,7 @@
-// src/components/questions/Question1.tsx
 import React, { useState } from "react";
 
 interface Question1Props {
-  onAnswer: (answer: string[]) => void; // parent receives selected apples
+  onAnswer: (answer: number) => void;
 }
 
 const Question1: React.FC<Question1Props> = ({ onAnswer }) => {
@@ -16,7 +15,7 @@ const Question1: React.FC<Question1Props> = ({ onAnswer }) => {
       : [...selected, apple];
 
     setSelected(newSelected);
-    onAnswer(newSelected); // send to parent
+    onAnswer(newSelected.length);
   };
 
   return (
@@ -24,28 +23,33 @@ const Question1: React.FC<Question1Props> = ({ onAnswer }) => {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(5, 80px)",
+          gridTemplateColumns: "repeat(5, 100px)",
           gap: "15px",
           justifyContent: "center",
         }}
       >
         {apples.map((apple) => (
-          <div
+          <img
             key={apple}
+            src="/question1/apple.svg" 
+            alt="apple"
             onClick={() => toggleApple(apple)}
             style={{
-              width: "70px",
-              height: "70px",
-              backgroundColor: selected.includes(apple)
-                ? "#4caf50"
-                : "#f44336",
-              borderRadius: "50%",
+              width: "100px",
+              height: "100px",
               cursor: "pointer",
-              transition: "0.2s",
+              transition: "transform 0.2s ease",
+              transform: selected.includes(apple)
+                ? "scale(1.3)" 
+                : "scale(1)",
+              filter: selected.includes(apple)
+                ? "drop-shadow(0px 0px 8px #4caf50)"
+                : "none", // optional glow
             }}
           />
         ))}
       </div>
+
       <p style={{ marginTop: "20px", fontWeight: "bold" }}>
         Selected: {selected.length}
       </p>
