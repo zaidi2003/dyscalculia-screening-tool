@@ -1,31 +1,28 @@
 import React, { useState } from "react";
 
 interface Question11Props {
-  onAnswer: (answer: string) => void;
+  onAnswer: (answer: number) => void; // ✅ use number type
 }
 
 const Question11: React.FC<Question11Props> = ({ onAnswer }) => {
-  const [answer, setAnswer] = useState("");
+  const [answer, setAnswer] = useState<number | "">("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
+    const val = e.target.value === "" ? "" : Number(e.target.value); // ✅ convert to number
     setAnswer(val);
-    onAnswer(val);
+    if (val !== "") onAnswer(val as number); // only send number to parent
   };
 
   return (
     <div
       style={{
         textAlign: "center",
-        //backgroundColor: "#fff8ec",
-        //border: "4px solid #e0b66b",
         borderRadius: "15px",
         padding: "30px",
         maxWidth: "800px",
         margin: "0 auto",
       }}
     >
-    
       {/* Cakes and plus sign */}
       <div
         style={{
@@ -45,27 +42,14 @@ const Question11: React.FC<Question11Props> = ({ onAnswer }) => {
             gap: "40px",
           }}
         >
-          <img
-            src="/cake.svg"
-            alt="bag"
-            style={{ width: "100px", height: "100px" }}
-          />
-          <img
-            src="/cake.svg"
-            alt="bag"
-            style={{ width: "100px", height: "100px" }}
-          />
-          <img
-            src="/cake.svg"
-            alt="bag"
-            style={{ width: "100px", height: "100px" }}
-          />
-          <img
-            src="/cake.svg"
-            alt="bag"
-            style={{ width: "100px", height: "100px" }}
-          />
-          
+          {[...Array(4)].map((_, i) => (
+            <img
+              key={i}
+              src="/cake.svg"
+              alt="cake"
+              style={{ width: "100px", height: "100px" }}
+            />
+          ))}
         </div>
 
         {/* Plus sign */}
@@ -73,16 +57,14 @@ const Question11: React.FC<Question11Props> = ({ onAnswer }) => {
 
         {/* Fatima’s 2 cakes */}
         <div style={{ display: "flex", gap: "40px" }}>
-          <img
-            src="/cake2.svg"
-            alt="bug"
-            style={{ width: "100px", height: "100px" }}
-          />
-          <img
-            src="/cake2.svg"
-            alt="bug"
-            style={{ width: "100px", height: "100px" }}
-          />
+          {[...Array(2)].map((_, i) => (
+            <img
+              key={i}
+              src="/cake2.svg"
+              alt="cake2"
+              style={{ width: "100px", height: "100px" }}
+            />
+          ))}
         </div>
       </div>
 

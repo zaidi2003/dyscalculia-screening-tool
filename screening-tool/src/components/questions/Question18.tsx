@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 
 interface Question18Props {
-  onAnswer: (answer: string) => void;
+  onAnswer: (answer: number) => void; // ✅ now expects a number
 }
 
 const Question18: React.FC<Question18Props> = ({ onAnswer }) => {
-  const [answer, setAnswer] = useState("");
+  const [answer, setAnswer] = useState<number | "">(""); // ✅ supports empty input and number
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
+    const val = e.target.value === "" ? "" : Number(e.target.value);
     setAnswer(val);
-    onAnswer(val);
+    if (val !== "") onAnswer(val as number); // ✅ only send number when not empty
   };
 
   return (
@@ -30,7 +30,7 @@ const Question18: React.FC<Question18Props> = ({ onAnswer }) => {
           justifyContent: "center",
           alignItems: "center",
           gap: "50px",
-          flexWrap: "wrap", // still wraps if very small screen
+          flexWrap: "wrap",
           marginBottom: "30px",
         }}
       >
@@ -41,12 +41,12 @@ const Question18: React.FC<Question18Props> = ({ onAnswer }) => {
         />
         <img
           src="/currency_notes/note_50.png"
-          alt="ten rupees"
+          alt="fifty rupees"
           style={{ height: "120px", width: "auto" }}
         />
         <img
           src="/currency_notes/note_20.png"
-          alt="ten rupees"
+          alt="twenty rupees"
           style={{ height: "120px", width: "auto" }}
         />
         <img
@@ -59,7 +59,6 @@ const Question18: React.FC<Question18Props> = ({ onAnswer }) => {
           alt="one rupee"
           style={{ width: "120px", height: "120px" }}
         />
-        
       </div>
 
       {/* Answer input */}

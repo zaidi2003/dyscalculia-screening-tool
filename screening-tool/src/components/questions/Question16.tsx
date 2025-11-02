@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 
 interface Question16Props {
-  onAnswer: (answer: string) => void;
+  onAnswer: (answer: number) => void; // ✅ number instead of string
 }
 
 const Question16: React.FC<Question16Props> = ({ onAnswer }) => {
-  const [answer, setAnswer] = useState("");
+  const [answer, setAnswer] = useState<number | "">(""); // ✅ allows empty input and number
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
+    const val = e.target.value === "" ? "" : Number(e.target.value); // ✅ convert to number
     setAnswer(val);
-    onAnswer(val);
+    if (val !== "") onAnswer(val as number); // ✅ only send number if not empty
   };
 
   return (
@@ -30,7 +30,7 @@ const Question16: React.FC<Question16Props> = ({ onAnswer }) => {
           justifyContent: "center",
           alignItems: "center",
           gap: "50px",
-          flexWrap: "wrap", // still wraps if very small screen
+          flexWrap: "wrap",
           marginBottom: "30px",
         }}
       >

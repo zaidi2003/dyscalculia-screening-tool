@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 
 interface Question17Props {
-  onAnswer: (answer: string) => void;
+  onAnswer: (answer: number) => void; // ✅ number instead of string
 }
 
 const Question17: React.FC<Question17Props> = ({ onAnswer }) => {
-  const [answer, setAnswer] = useState("");
+  const [answer, setAnswer] = useState<number | "">(""); // ✅ allows empty string before input
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
+    const val = e.target.value === "" ? "" : Number(e.target.value); // ✅ convert to number
     setAnswer(val);
-    onAnswer(val);
+    if (val !== "") onAnswer(val as number); // ✅ only call when not empty
   };
 
   return (
@@ -30,13 +30,13 @@ const Question17: React.FC<Question17Props> = ({ onAnswer }) => {
           justifyContent: "center",
           alignItems: "center",
           gap: "50px",
-          flexWrap: "wrap", // still wraps if very small screen
+          flexWrap: "wrap",
           marginBottom: "30px",
         }}
       >
         <img
           src="/currency_notes/note_20.png"
-          alt="ten rupees"
+          alt="twenty rupees"
           style={{ height: "120px", width: "auto" }}
         />
         <img
@@ -44,7 +44,6 @@ const Question17: React.FC<Question17Props> = ({ onAnswer }) => {
           alt="five rupees"
           style={{ width: "120px", height: "120px" }}
         />
-        
         <img
           src="/two_rupees.svg"
           alt="two rupees"

@@ -31,6 +31,7 @@ export interface QuestionItem {
   headerColor?: string;
   backgroundColor?: string;
   correct_answer?: string | number;
+  type?: string;
 }
 
 export const questionsData: QuestionItem[] = [
@@ -39,36 +40,42 @@ export const questionsData: QuestionItem[] = [
     title: "Can you select five apples?",
     component: <Question1 onAnswer={() => {}} />,
     correct_answer: 5,
+    type: "deviation",
   },
   {
     id: 2,
     title: "Select two cars from the options below.",
     component: <Question2 onAnswer={() => {}} />,
     correct_answer: 2,
+    type: "deviation",
   },
   {
     id: 3,
     title: "Select the correct number of butterflies.",
     component: <Question3 onAnswer={() => {}} />,
     correct_answer: 3,
+    type: "binary",
   },
   {
     id: 4,
     title: "Select the correct number of fruits.",
     component: <Question4 onAnswer={() => {}} />,
     correct_answer: 4,
+    type: "binary",
   },
   {
     id: 5,
     title: "Select the box with the greater quantity.",
     component: <Question5 onAnswer={() => {}} />,
     correct_answer: "leaves",
+    type: "binary",
   },
   {
     id: 6,
     title: "Select the box with the lesser quantity.",
     component: <Question6 onAnswer={() => {}} />,
     correct_answer: "cat",
+    type: "binary",
   },
   
   {
@@ -76,6 +83,7 @@ export const questionsData: QuestionItem[] = [
     title: "Match each group of cars to the correct number.",
     component: <Question7 onAnswer={() => {}} />,
     correct_answer: "Correct",
+    type: "binary",
   },
   {
     id: 8,
@@ -86,6 +94,7 @@ export const questionsData: QuestionItem[] = [
     ),
     component: <Question8 onAnswer={() => {}} />,
     correct_answer: 27.5,
+    type: "binary",
   },
   {
     id: 9,
@@ -96,7 +105,8 @@ export const questionsData: QuestionItem[] = [
       </>
     ),
     component: <Question9 onAnswer={() => {}} />,
-    correct_answer: 54,
+    correct_answer: "54",
+    type: "binary",
   },
   {
     id: 10,
@@ -106,7 +116,8 @@ export const questionsData: QuestionItem[] = [
       </>
     ),
     component: <Question10 onAnswer={() => {}} />,
-    correct_answer: 20,
+    correct_answer: "20",
+    type: "binary",
   },
   {
     id: 11,
@@ -121,6 +132,7 @@ export const questionsData: QuestionItem[] = [
     correct_answer: 6,
     borderColor: "#F4900C",
     headerColor: "#FFB95C", 
+    type: "deviation",
   },
   {
     id: 12,
@@ -135,6 +147,7 @@ export const questionsData: QuestionItem[] = [
     correct_answer: 2,
     borderColor: "#F4900C",
     headerColor: "#FFB95C", 
+    type: "deviation",
   },
   {
     id: 13,
@@ -148,6 +161,7 @@ export const questionsData: QuestionItem[] = [
     correct_answer: "1/8",
     borderColor: "#F4900C",
     headerColor: "#FFB95C", 
+    type: "binary",
   },
   {
     id: 14,
@@ -160,6 +174,7 @@ export const questionsData: QuestionItem[] = [
     borderColor: "#F4900C",
     headerColor: "#FFB95C", 
     correct_answer: "5/5",
+    type: "binary",
   },
   {
     id: 15,
@@ -172,6 +187,7 @@ export const questionsData: QuestionItem[] = [
     borderColor: "#F4900C",
     headerColor: "#FFB95C", 
     correct_answer: "7/8",
+    type: "binary",
   },
   {
     id: 16,
@@ -184,6 +200,7 @@ export const questionsData: QuestionItem[] = [
     borderColor: "#1C3046",
     headerColor: "#BBDFFF",
     correct_answer: 13,
+    type: "deviation",
   },
   {
     id: 17,
@@ -197,6 +214,7 @@ export const questionsData: QuestionItem[] = [
     borderColor: "#1C3046",
     headerColor: "#BBDFFF",
     correct_answer: 28,
+    type: "deviation",
 
   },
   {
@@ -211,6 +229,7 @@ export const questionsData: QuestionItem[] = [
     borderColor: "#1C3046",
     headerColor: "#BBDFFF",
     correct_answer: 181,
+    type: "deviation",
   },
   {
     id: 19,
@@ -222,7 +241,8 @@ export const questionsData: QuestionItem[] = [
     component: <Question19 onAnswer={() => {}} />,
     borderColor: "#1C3046",
     headerColor: "#BBDFFF",
-    correct_answer: 2,
+    correct_answer: "2",
+    type: "binary",
 
   },
   {
@@ -235,7 +255,8 @@ export const questionsData: QuestionItem[] = [
     component: <Question20 onAnswer={() => {}} />,
     borderColor: "#1C3046",
     headerColor: "#BBDFFF",
-    correct_answer: 9,
+    correct_answer: "9",
+    type: "binary",
 
   }
 

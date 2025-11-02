@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import ScreenBorder from "./components/ScreenBorder";
 import { questionsData } from "./questions";
+import { db } from "./firebaseConfig";
+import { doc, setDoc } from "firebase/firestore";
 
 const App: React.FC = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(-1);
   const [answers, setAnswers] = useState<{ [key: number]: any }>({});
   const [startTime, setStartTime] = useState(Date.now());
   const [timePerQuestion, setTimePerQuestion] = useState<{ [key: number]: number }>({});
   const [userInfo, setUserInfo] = useState({ name: "", age: "" });
 
-  // ✅ Save answers for each question
   const handleAnswer = (id: number, ans: any) => {
     setAnswers((prev) => ({ ...prev, [id]: ans }));
   };
@@ -26,7 +27,6 @@ const App: React.FC = () => {
   const goToNext = () => {
   const timeSpent = (Date.now() - startTime) / 1000;
 
-  // Save time for the *current* question index
   setTimePerQuestion((prev) => ({
     ...prev,
     [currentIndex]: timeSpent,
@@ -39,36 +39,123 @@ const App: React.FC = () => {
 
   const goToPrev = () => setCurrentIndex((prev) => prev - 1);
 
+  const calculateResults = () => {
+    const results: Record<string, { score: number; time: number }> = {}; // ✅ store both score + time
+
+    for (let i = 0; i < questionsData.length; i++) {
+      const q = questionsData[i];
+      const userAnswer = answers[q.id];
+      const correct = q.correct_answer;
+      const key = `question${q.id}`; // e.g. "question1"
+
+      let score = 0;
+
+      if (q.type === "binary") {
+        // 1 if correct, 0 otherwise
+        if (typeof correct === "number" && typeof userAnswer === "number") {
+          score = correct === userAnswer ? 1 : 0;
+        } else if (typeof correct === "string" && typeof userAnswer === "string") {
+          score = userAnswer.toLowerCase() === correct.toLowerCase() ? 1 : 0;
+        }
+      } 
+      else if (q.type === "deviation") {
+        //  absolute difference for numeric answers
+        if (typeof correct === "number" && typeof userAnswer === "number") {
+          score = Math.abs(correct - userAnswer);
+        }
+      }
+
+      //  Include both score and time
+      results[key] = {
+        score: score,
+        time: timePerQuestion[q.id] || 0, // fallback to 0 if undefined
+      };
+    }
+
+    console.log("Results JSON:", results);
+    return results;
+  };
+
+  const submitResultsToFirebase = async () => {
+    const results = calculateResults();
+    try {
+      const docRef = doc(db, "results", `${userInfo.name}-${Date.now()}`);
+      await setDoc(docRef, {
+        userInfo,
+        results,
+        timestamp: new Date().toISOString(),
+      });
+      console.log("✅ Results sent to Firebase!");
+    } catch (error) {
+      console.error("❌ Firestore upload failed:", error);
+    }
+  };
+
+
+
   //  Start screen
   if (currentIndex === -1) {
     return (
       <ScreenBorder question="Dyscalculia Screening Tool">
         <div style={{ textAlign: "center", maxWidth: "400px", margin: "40px auto" }}>
           <h2>Please enter your information</h2>
-          <div style={{ marginBottom: "15px" }}>
+
+          <div style={{ marginBottom: "20px" }}>
             <input
               type="text"
-              placeholder="Name"
+              placeholder="Enter your assigned ID"
               value={userInfo.name}
               onChange={(e) => setUserInfo({ ...userInfo, name: e.target.value })}
+              style={{
+                width: "100%",
+                padding: "12px 16px",
+                fontSize: "18px",
+                borderRadius: "8px",
+                border: "2px solid #ccc",
+                outline: "none",
+                textAlign: "center",
+                boxSizing: "border-box",
+              }}
             />
           </div>
-          <div style={{ marginBottom: "15px" }}>
+
+          <div style={{ marginBottom: "20px" }}>
             <input
               type="text"
-              placeholder="Age"
+              placeholder="Enter your age"
               value={userInfo.age}
               onChange={(e) => setUserInfo({ ...userInfo, age: e.target.value })}
+              style={{
+                width: "100%",
+                padding: "12px 16px",
+                fontSize: "16px",
+                borderRadius: "8px",
+                border: "2px solid #ccc",
+                outline: "none",
+                textAlign: "center",
+                boxSizing: "border-box",
+              }}
             />
           </div>
+
           <button
             onClick={goToNext}
             disabled={!userInfo.name || !userInfo.age}
+            style={{
+              padding: "12px 24px",
+              fontSize: "16px",
+              borderRadius: "8px",
+              backgroundColor: "#4caf50",
+              color: "white",
+              border: "none",
+              cursor: "pointer",
+            }}
           >
             Start Test ➡
           </button>
         </div>
       </ScreenBorder>
+
     );
   }
 
@@ -119,34 +206,8 @@ if (currentIndex >= questions.length) {
     }
   });
 
-  console.log("✅ Final Score:", score, "/", questionsData.length);
-
-  const calculateResults = () => {
-    const results: number[] = [];
-
-    for (let i = 0; i < questionsData.length; i++) {
-      const q = questionsData[i];
-      const userAnswer = answers[q.id];
-      const correct = q.correct_answer;
-
-      if (typeof correct === "number" && typeof userAnswer === "number") {
-        const diff = Math.abs(correct - userAnswer);
-        results.push(diff === 0 ? 1 : 0); // ✅ 1 if exact match, 0 otherwise
-      } 
-      else if (typeof correct === "string" && typeof userAnswer === "string") {
-        results.push(userAnswer.toLowerCase() === correct.toLowerCase() ? 1 : 0); // ✅ 1 if correct string match
-      } 
-      else {
-        results.push(0); // fallback if types don't match
-      }
-    }
-
-    console.log("Results array:", results);
-  };
-
-
-  calculateResults();
-
+  submitResultsToFirebase();
+  
 
 
   return (
@@ -169,14 +230,15 @@ if (currentIndex >= questions.length) {
     <strong>Question {q.id}:</strong> <br />
 
     <div style={{ marginTop: "8px" }}>
-      <strong>Your Answer:</strong>{" "}
+      <strong>Your Answer: {typeof(answers[q.id])}</strong>{" "}
       {Array.isArray(answers[q.id]) && answers[q.id].length > 0
         ? answers[q.id].join(", ")
         : answers[q.id] || "No answer selected."}
     </div>
 
+
     <div style={{ marginTop: "6px" }}>
-      <strong>Correct Answer:</strong>{" "}
+      <strong>Correct Answer: {typeof(q.correct_answer)}</strong>{" "}
       {Array.isArray(q.correct_answer) && q.correct_answer.length > 0
         ? q.correct_answer.join(", ")
         : q.correct_answer || "No correct answer found."}
