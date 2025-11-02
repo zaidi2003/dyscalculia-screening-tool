@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import ScreenBorder from "./components/ScreenBorder";
 import { questionsData } from "./questions";
-import { db } from "./firebaseConfig";
-import { doc, setDoc } from "firebase/firestore";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
+
 
 const App: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(-1);
