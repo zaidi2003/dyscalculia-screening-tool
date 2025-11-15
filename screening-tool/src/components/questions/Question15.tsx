@@ -7,7 +7,7 @@ interface Question10Props {
 const Question10: React.FC<Question10Props> = ({ onAnswer }) => {
   const [selected, setSelected] = useState<string>("");
 
-  const options = ["1/8", "1/6", "7/8", "2/8"];
+  const options = ["1/2", "1/3", "2/3", "1/4"];
 
   const handleSelect = (opt: string) => {
     setSelected(opt);
@@ -27,7 +27,7 @@ const Question10: React.FC<Question10Props> = ({ onAnswer }) => {
       {/* 🖼️ Left Side Image */}
       <div style={{ flex: "1 1 200px", textAlign: "center" }}>
         <img
-          src="/pizza.svg"
+          src="/water.png"
           alt="fruits"
           style={{
             width: "400px",

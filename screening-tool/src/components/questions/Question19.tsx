@@ -13,10 +13,10 @@ const Question19: React.FC<Question19Props> = ({ onAnswer }) => {
   };
 
   const boxes = [
-    { id: 1, choice: "2", img: "/clock_faces/clock2.svg", alt: "2" },
-    { id: 2, choice: "10", img: "/clock_faces/clock10.svg", alt: "10" },
-    { id: 3, choice: "7", img: "/clock_faces/clock7.svg", alt: "7" },
-    { id: 4, choice: "8", img: "/clock_faces/clock8.svg", alt: "8" },
+    { id: 1, choice: "2", img: "/clock_faces/clock2.png", alt: "2" },
+    { id: 2, choice: "10", img: "/clock_faces/clock10.png", alt: "10" },
+    { id: 3, choice: "7", img: "/clock_faces/clock7.png", alt: "7" },
+    { id: 4, choice: "8", img: "/clock_faces/clock8.png", alt: "8" },
   ];
 
   return (

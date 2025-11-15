@@ -37,42 +37,66 @@ export interface QuestionItem {
 export const questionsData: QuestionItem[] = [
   {
     id: 1,
-    title: "Can you select five apples?",
+    title: (
+      <>
+        Can you select <u>five apples</u>?
+      </>
+    ),
     component: <Question1 onAnswer={() => {}} />,
     correct_answer: 5,
     type: "deviation",
   },
   {
     id: 2,
-    title: "Select two cars from the options below.",
+    title: (
+      <>
+       Select <u>two cars</u> from the options below.
+      </>
+    ),
     component: <Question2 onAnswer={() => {}} />,
     correct_answer: 2,
     type: "deviation",
   },
   {
     id: 3,
-    title: "Select the correct number of butterflies.",
+    title: (
+      <>
+        Select the correct number of <u>butterflies.</u> 
+      </>
+    ),
     component: <Question3 onAnswer={() => {}} />,
     correct_answer: 3,
     type: "binary",
   },
   {
     id: 4,
-    title: "Select the correct number of fruits.",
+    title: (
+      <>
+        Select the correct number of <u>fruits.</u> 
+      </>
+    ),
     component: <Question4 onAnswer={() => {}} />,
     correct_answer: 4,
     type: "binary",
   },
   {
     id: 5,
-    title: "Select the box with the greater quantity.",
+    title: (
+      <>
+        Select the box with the <u>greater quantity.</u> 
+      </>
+    ),
     component: <Question5 onAnswer={() => {}} />,
     correct_answer: "leaves",
     type: "binary",
   },
   {
     id: 6,
-    title: "Select the box with the lesser quantity.",
+    title: (
+      <>
+        Select the box with the <u>lesser quantity.</u> 
+      </>
+    ),
     component: <Question6 onAnswer={() => {}} />,
     correct_answer: "cat",
     type: "binary",
@@ -80,7 +104,11 @@ export const questionsData: QuestionItem[] = [
   
   {
     id: 7,
-    title: "Match each group of cars to the correct number.",
+    title: (
+      <>
+        Match each group of cars to <u>the correct number.</u>
+      </>
+    ),
     component: <Question7 onAnswer={() => {}} />,
     correct_answer: "Correct",
     type: "binary",
@@ -138,9 +166,9 @@ export const questionsData: QuestionItem[] = [
     id: 12,
     title: (
       <>
-        Ali bought <span style={{ color: "#12a105ff" }}>4</span> cakes, Fatima bought{" "}
+        Zainab has <span style={{ color: "#12a105ff" }}>4</span> cakes, Abbas has{" "}
         <span style={{ color: "#12a105ff" }}>2</span> cakes. <br />
-        How many cakes do they have altogether?
+        How many more cakes does Zainab have than Abbas?
       </>
     ),
     component: <Question12 onAnswer={() => {}} />,
@@ -180,7 +208,7 @@ export const questionsData: QuestionItem[] = [
     id: 15,
     title: (
       <>
-        What fraction of the water is  <u> left?</u> 
+        What fraction of the water is  <u>remaining?</u> 
       </>
     ),
     component: <Question15 onAnswer={() => {}} />,
