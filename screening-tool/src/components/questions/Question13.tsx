@@ -27,7 +27,7 @@ const Question13: React.FC<Question13Props> = ({ onAnswer }) => {
       {/* 🖼️ Left Side Image */}
       <div style={{ flex: "1 1 200px", textAlign: "center" }}>
         <img
-          src="/pizza.svg"
+          src="/pizza.png"
           alt="fruits"
           style={{
             width: "400px",
