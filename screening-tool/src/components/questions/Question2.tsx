@@ -56,7 +56,7 @@ const Question2: React.FC<Question2Props> = ({ onAnswer }) => {
       >
         {/* Road SVG */}
         <img 
-          src="/question2/road.svg" 
+          src="/road.svg" 
           alt="Road"
           style={{
             width: "100%",
