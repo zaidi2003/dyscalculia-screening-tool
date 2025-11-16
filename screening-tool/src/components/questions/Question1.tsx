@@ -31,7 +31,7 @@ const Question1: React.FC<Question1Props> = ({ onAnswer }) => {
         {apples.map((apple) => (
           <img
             key={apple}
-            src="/question1/apple.svg" 
+            src="/apple.svg" 
             alt="apple"
             onClick={() => toggleApple(apple)}
             style={{

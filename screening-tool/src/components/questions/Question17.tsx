@@ -35,7 +35,7 @@ const Question17: React.FC<Question17Props> = ({ onAnswer }) => {
         }}
       >
         <img
-          src="/currency_notes/note_20.png"
+          src="/note_20.png"
           alt="twenty rupees"
           style={{ height: "120px", width: "auto" }}
         />

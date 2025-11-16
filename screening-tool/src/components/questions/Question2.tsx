@@ -12,17 +12,17 @@ const Question2: React.FC<Question2Props> = ({ onAnswer }) => {
     { 
       id: "Car 1", 
       position: { x: 500, y: 400 },
-      image: "/question2/red_car.svg"
+      image: "/red_car.svg"
     },
     { 
       id: "Car 2", 
       position: { x: 1000, y: 50 }, 
-      image: "/question2/blue_car.svg"
+      image: "/blue_car.svg"
     },
     { 
       id: "Car 3", 
       position: { x: 1500, y: 300 },
-      image: "/question2/green_car1.svg"
+      image: "/green_car1.svg"
     },
   ];
 

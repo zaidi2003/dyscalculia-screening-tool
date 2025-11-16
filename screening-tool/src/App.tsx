@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import ScreenBorder from "./components/ScreenBorder";
 import { questionsData } from "./questions";
 import { db } from "./firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
+import { usePreloadImages } from "./hooks/preloadImages";
 
 const App: React.FC = () => {
+  usePreloadImages();
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [answers, setAnswers] = useState<{ [key: number]: any }>({});
   const [startTime, setStartTime] = useState(Date.now());

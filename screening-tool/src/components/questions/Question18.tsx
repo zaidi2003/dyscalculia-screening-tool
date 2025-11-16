@@ -35,22 +35,22 @@ const Question18: React.FC<Question18Props> = ({ onAnswer }) => {
         }}
       >
         <img
-          src="/currency_notes/note_100.png"
+          src="/note_100.png"
           alt="hundred rupees"
           style={{ height: "120px", width: "auto" }}
         />
         <img
-          src="/currency_notes/note_50.png"
+          src="/note_50.png"
           alt="fifty rupees"
           style={{ height: "120px", width: "auto" }}
         />
         <img
-          src="/currency_notes/note_20.png"
+          src="/note_20.png"
           alt="twenty rupees"
           style={{ height: "120px", width: "auto" }}
         />
         <img
-          src="/currency_notes/note_10.png"
+          src="/note_10.png"
           alt="ten rupees"
           style={{ height: "120px", width: "auto" }}
         />
