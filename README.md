@@ -3,6 +3,7 @@ Dyscalculia Screening Tool is an accessible application developed as part of my 
 
 ![tutorial_short](https://github.com/user-attachments/assets/5138f515-ec3a-4a84-8bcd-87e107e85e75)
 
+#Categories of Student Data and Corresponding Assessment Measures (for ML tasks)
 
 | Category                        | Type of Data Collected                 | Example Measures / Observations                  |
 |---------------------------------|--------------------------------------|-------------------------------------------------|
