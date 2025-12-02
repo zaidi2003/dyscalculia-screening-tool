@@ -301,9 +301,11 @@ if (currentIndex >= questions.length) {
           position: "absolute",
           bottom: "20px",
           left: "20px",
+          opacity: 0.3, 
         }}
       >
-        <button onClick={goToPrev} disabled={currentIndex === 0}>
+        {/* onClick={goToPrev} disabled={currentIndex === 0} */}
+        <button >
           ⬅
         </button>
       </div>

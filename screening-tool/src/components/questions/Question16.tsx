@@ -69,8 +69,10 @@ const Question16: React.FC<Question16Props> = ({ onAnswer }) => {
             fontSize: "18px",
             textAlign: "center",
             borderRadius: "8px",
-            border: "2px solid #b77b33",
+            border: "2px solid #1C3046",
             padding: "5px",
+            backgroundColor: "#fff", // white background
+            color: "#000",
           }}
         />
       </div>
