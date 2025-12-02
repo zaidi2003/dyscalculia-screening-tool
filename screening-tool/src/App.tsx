@@ -117,6 +117,8 @@ const App: React.FC = () => {
                 outline: "none",
                 textAlign: "center",
                 boxSizing: "border-box",
+                backgroundColor: "#fefefe",
+                color: "#333",
               }}
             />
           </div>
@@ -130,12 +132,14 @@ const App: React.FC = () => {
               style={{
                 width: "100%",
                 padding: "12px 16px",
-                fontSize: "16px",
+                fontSize: "18px",
                 borderRadius: "8px",
                 border: "2px solid #ccc",
                 outline: "none",
                 textAlign: "center",
                 boxSizing: "border-box",
+                backgroundColor: "#fefefe",
+                color: "#333",
               }}
             />
           </div>
@@ -212,59 +216,67 @@ if (currentIndex >= questions.length) {
   
 
 
-  return (
-    <ScreenBorder question=" Submission Summary" scrollable>
-      <div style={{ textAlign: "left", maxWidth: "600px", margin: "40px auto" }}>
-        <h2>All Done, {userInfo.name}!</h2>
-        <p>Here’s a summary of your responses:</p>
+  // return (
+  //   <ScreenBorder question=" Submission Summary" scrollable>
+  //     <div style={{ textAlign: "left", maxWidth: "600px", margin: "40px auto" }}>
+  //       <h2>All Done, {userInfo.name}!</h2>
+  //       <p>Here’s a summary of your responses:</p>
 
-        {questions.map((q) => (
-          <div
-    key={q.id}
-    style={{
-      backgroundColor: "#f1f8e9",
-      padding: "12px 15px",
-      borderRadius: "10px",
-      marginBottom: "15px",
-      lineHeight: "1.6",
-    }}
-  >
-    <strong>Question {q.id}:</strong> <br />
+  //       {questions.map((q) => (
+  //         <div
+  //   key={q.id}
+  //   style={{
+  //     backgroundColor: "#f1f8e9",
+  //     padding: "12px 15px",
+  //     borderRadius: "10px",
+  //     marginBottom: "15px",
+  //     lineHeight: "1.6",
+  //   }}
+  // >
+  //   <strong>Question {q.id}:</strong> <br />
 
-    <div style={{ marginTop: "8px" }}>
-      <strong>Your Answer: {typeof(answers[q.id])}</strong>{" "}
-      {Array.isArray(answers[q.id]) && answers[q.id].length > 0
-        ? answers[q.id].join(", ")
-        : answers[q.id] || "No answer selected."}
-    </div>
+  //   <div style={{ marginTop: "8px" }}>
+  //     <strong>Your Answer: {typeof(answers[q.id])}</strong>{" "}
+  //     {Array.isArray(answers[q.id]) && answers[q.id].length > 0
+  //       ? answers[q.id].join(", ")
+  //       : answers[q.id] || "No answer selected."}
+  //   </div>
 
 
-    <div style={{ marginTop: "6px" }}>
-      <strong>Correct Answer: {typeof(q.correct_answer)}</strong>{" "}
-      {Array.isArray(q.correct_answer) && q.correct_answer.length > 0
-        ? q.correct_answer.join(", ")
-        : q.correct_answer || "No correct answer found."}
-    </div>
-  </div>
-        ))}
+  //   <div style={{ marginTop: "6px" }}>
+  //     <strong>Correct Answer: {typeof(q.correct_answer)}</strong>{" "}
+  //     {Array.isArray(q.correct_answer) && q.correct_answer.length > 0
+  //       ? q.correct_answer.join(", ")
+  //       : q.correct_answer || "No correct answer found."}
+  //   </div>
+  // </div>
+  //       ))}
 
-        <h3 style={{ marginTop: "30px" }}>⏱ Time per question</h3>
+  //       <h3 style={{ marginTop: "30px" }}>⏱ Time per question</h3>
         
-        <ul>
-          {questions.map((q, index) => (
-            <li key={q.id}>
-              Question {q.id}:{" "}
-              {timePerQuestion[index] !== undefined
-                ? `${timePerQuestion[index].toFixed(2)} seconds`
-                : "N/A"}
-            </li>
-          ))}
-        </ul>
+  //       <ul>
+  //         {questions.map((q, index) => (
+  //           <li key={q.id}>
+  //             Question {q.id}:{" "}
+  //             {timePerQuestion[index] !== undefined
+  //               ? `${timePerQuestion[index].toFixed(2)} seconds`
+  //               : "N/A"}
+  //           </li>
+  //         ))}
+  //       </ul>
 
 
-        <div style={{ marginTop: "40px", fontWeight: "bold" }}>
-          Thank you for completing the test!
-        </div>
+  //       <div style={{ marginTop: "40px", fontWeight: "bold" }}>
+  //         Thank you for completing the test!
+  //       </div>
+  //     </div>
+  //   </ScreenBorder>
+  // );
+  return (
+    <ScreenBorder question="Congratulations! 🎉" scrollable>
+      <div style={{ textAlign: "center", marginTop: "100px" }}>
+        <h2>Congratulations, {userInfo.name}!</h2>
+        <p>You have successfully completed the test.</p>
       </div>
     </ScreenBorder>
   );

@@ -83,8 +83,6 @@ const Question11: React.FC<Question11Props> = ({ onAnswer }) => {
             borderRadius: "8px",
             border: "2px solid #b77b33",
             padding: "5px",
-            backgroundColor: "#fff", // white background
-    color: "#000",           // black text
           }}
         />
       </div>
