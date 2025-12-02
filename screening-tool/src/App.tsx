@@ -39,7 +39,7 @@ const App: React.FC = () => {
 };
 
 
-  const goToPrev = () => setCurrentIndex((prev) => prev - 1);
+  // const goToPrev = () => setCurrentIndex((prev) => prev - 1);
 
   const calculateResults = () => {
     const results: Record<string, { score: number; time: number }> = {}; // ✅ store both score + time
