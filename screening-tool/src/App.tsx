@@ -42,41 +42,37 @@ const App: React.FC = () => {
   // const goToPrev = () => setCurrentIndex((prev) => prev - 1);
 
   const calculateResults = () => {
-    const results: Record<string, { score: number; time: number }> = {}; // ✅ store both score + time
+  const results: { id: number; score: number; time: number }[] = [];
 
-    for (let i = 0; i < questionsData.length; i++) {
-      const q = questionsData[i];
-      const userAnswer = answers[q.id];
-      const correct = q.correct_answer;
-      const key = `question${q.id}`; // e.g. "question1"
+  for (let i = 0; i < questionsData.length; i++) {
+    const q = questionsData[i];
+    const userAnswer = answers[q.id];
+    const correct = q.correct_answer;
 
-      let score = 0;
+    let score = 0;
 
-      if (q.type === "binary") {
-        // 1 if correct, 0 otherwise
-        if (typeof correct === "number" && typeof userAnswer === "number") {
-          score = correct === userAnswer ? 1 : 0;
-        } else if (typeof correct === "string" && typeof userAnswer === "string") {
-          score = userAnswer.toLowerCase() === correct.toLowerCase() ? 1 : 0;
-        }
-      } 
-      else if (q.type === "deviation") {
-        //  absolute difference for numeric answers
-        if (typeof correct === "number" && typeof userAnswer === "number") {
-          score = Math.abs(correct - userAnswer);
-        }
+    if (q.type === "binary") {
+      if (typeof correct === "number" && typeof userAnswer === "number") {
+        score = correct === userAnswer ? 1 : 0;
+      } else if (typeof correct === "string" && typeof userAnswer === "string") {
+        score = userAnswer.toLowerCase() === correct.toLowerCase() ? 1 : 0;
       }
-
-      //  Include both score and time
-      results[key] = {
-        score: score,
-        time: timePerQuestion[q.id] || 0, // fallback to 0 if undefined
-      };
+    } else if (q.type === "deviation") {
+      if (typeof correct === "number" && typeof userAnswer === "number") {
+        score = Math.abs(correct - userAnswer);
+      }
     }
 
-    console.log("Results JSON:", results);
-    return results;
-  };
+    results.push({
+      id: q.id,
+      score,
+      time: timePerQuestion[q.id] || 0,
+    });
+  }
+
+  return results;
+};
+
 
   const submitResultsToFirebase = async () => {
     const results = calculateResults();
