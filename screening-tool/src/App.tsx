@@ -27,16 +27,24 @@ const App: React.FC = () => {
 
 
   const goToNext = () => {
-  const timeSpent = (Date.now() - startTime) / 1000;
+    const timeSpent = (Date.now() - startTime) / 1000;
 
-  setTimePerQuestion((prev) => ({
-    ...prev,
-    [currentIndex]: timeSpent,
-  }));
+    // setTimePerQuestion((prev) => ({
+    //   ...prev,
+    //   [currentIndex]: timeSpent,
+    // }));
+    const qid = questions[currentIndex]?.id;
+    if (qid !== undefined) {
+      setTimePerQuestion((prev) => ({
+        ...prev,
+        [qid]: timeSpent,
+      }));
+    }
 
-  setStartTime(Date.now());
-  setCurrentIndex((prev) => prev + 1);
-};
+
+    setStartTime(Date.now());
+    setCurrentIndex((prev) => prev + 1);
+  };
 
 
   // const goToPrev = () => setCurrentIndex((prev) => prev - 1);
@@ -164,13 +172,16 @@ const App: React.FC = () => {
   
   // Submission Screen
 if (currentIndex >= questions.length) {
-  if (!timePerQuestion[currentIndex - 1]) {
+  const lastQ = questions[currentIndex - 1];
+
+  if (lastQ && !timePerQuestion[lastQ.id]) {
     const timeSpent = (Date.now() - startTime) / 1000;
     setTimePerQuestion((prev) => ({
       ...prev,
-      [currentIndex - 1]: timeSpent,
+      [lastQ.id]: timeSpent,
     }));
   }
+
 
   // const q1Answer = answers[1];
   // const q1Correct = questionsData.find((q) => q.id === 1)?.correct_answer;
