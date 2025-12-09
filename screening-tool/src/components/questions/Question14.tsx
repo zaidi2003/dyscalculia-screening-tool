@@ -7,7 +7,7 @@ interface Question14Props {
 const Question14: React.FC<Question14Props> = ({ onAnswer }) => {
   const [selected, setSelected] = useState<string>("");
 
-  const options = ["5/5", "0/5", "1/5", "4/5"];
+  const options = ["5/5", "4/5", "1/5", "2/5"];
 
   const handleSelect = (opt: string) => {
     setSelected(opt);

@@ -3,10 +3,8 @@ import ScreenBorder from "./components/ScreenBorder";
 import { questionsData } from "./questions";
 import { db } from "./firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
-import { usePreloadImages } from "./hooks/preloadImages";
 
 const App: React.FC = () => {
-  usePreloadImages();
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [answers, setAnswers] = useState<{ [key: number]: any }>({});
   const [startTime, setStartTime] = useState(Date.now());
@@ -17,70 +15,60 @@ const App: React.FC = () => {
     setAnswers((prev) => ({ ...prev, [id]: ans }));
   };
 
-
   const questions = questionsData.map((q) => ({
-  ...q,
-  component: React.cloneElement(q.component as any, {
-    onAnswer: (ans: any) => handleAnswer(q.id, ans),
-  }),
-}));
-
+    ...q,
+    component: React.cloneElement(q.component as any, {
+      onAnswer: (ans: any) => handleAnswer(q.id, ans),
+    }),
+  }));
 
   const goToNext = () => {
-    const timeSpent = (Date.now() - startTime) / 1000;
-
-    // setTimePerQuestion((prev) => ({
-    //   ...prev,
-    //   [currentIndex]: timeSpent,
-    // }));
+    // Save time for current question
     const qid = questions[currentIndex]?.id;
     if (qid !== undefined) {
+      const timeSpent = (Date.now() - startTime) / 1000;
       setTimePerQuestion((prev) => ({
         ...prev,
         [qid]: timeSpent,
       }));
     }
 
-
-    setStartTime(Date.now());
+    // Move to next question
     setCurrentIndex((prev) => prev + 1);
+
+    // Reset timer for next question
+    setStartTime(Date.now());
   };
 
-
-  // const goToPrev = () => setCurrentIndex((prev) => prev - 1);
-
   const calculateResults = () => {
-  const results: { id: number; score: number; time: number }[] = [];
+    const results: { id: number; score: number; time: number }[] = [];
 
-  for (let i = 0; i < questionsData.length; i++) {
-    const q = questionsData[i];
-    const userAnswer = answers[q.id];
-    const correct = q.correct_answer;
+    questionsData.forEach((q) => {
+      const userAnswer = answers[q.id];
+      const correct = q.correct_answer;
+      let score = 0;
 
-    let score = 0;
-
-    if (q.type === "binary") {
-      if (typeof correct === "number" && typeof userAnswer === "number") {
-        score = correct === userAnswer ? 1 : 0;
-      } else if (typeof correct === "string" && typeof userAnswer === "string") {
-        score = userAnswer.toLowerCase() === correct.toLowerCase() ? 1 : 0;
+      if (q.type === "binary") {
+        if (typeof correct === "number" && typeof userAnswer === "number") {
+          score = correct === userAnswer ? 1 : 0;
+        } else if (typeof correct === "string" && typeof userAnswer === "string") {
+          score = userAnswer.toLowerCase() === correct.toLowerCase() ? 1 : 0;
+        }
+      } else if (q.type === "deviation") {
+        if (typeof correct === "number" && typeof userAnswer === "number") {
+          score = Math.abs(correct - userAnswer);
+        }
       }
-    } else if (q.type === "deviation") {
-      if (typeof correct === "number" && typeof userAnswer === "number") {
-        score = Math.abs(correct - userAnswer);
-      }
-    }
 
-    results.push({
-      id: q.id,
-      score,
-      time: timePerQuestion[q.id] || 0,
+      results.push({
+        id: q.id,
+        score,
+        time: timePerQuestion[q.id] || 0,
+      });
     });
-  }
 
-  return results;
-};
-
+    return results;
+  };
 
   const submitResultsToFirebase = async () => {
     const results = calculateResults();
@@ -97,9 +85,7 @@ const App: React.FC = () => {
     }
   };
 
-
-
-  //  Start screen
+  // Start Screen
   if (currentIndex === -1) {
     return (
       <ScreenBorder question="Dyscalculia Screening Tool">
@@ -165,132 +151,61 @@ const App: React.FC = () => {
           </button>
         </div>
       </ScreenBorder>
-
     );
   }
 
-  
   // Submission Screen
-if (currentIndex >= questions.length) {
-  const lastQ = questions[currentIndex - 1];
+  if (currentIndex >= questions.length) {
+    submitResultsToFirebase();
+    console.log("Results submitted:", { userInfo, answers, timePerQuestion });
+    return (
+      <ScreenBorder question="Submission Summary" scrollable>
+        <div style={{ textAlign: "left", maxWidth: "600px", margin: "40px auto" }}>
+          <h2>All Done, {userInfo.name}!</h2>
+          <p>Here’s a summary of your responses:</p>
 
-  if (lastQ && !timePerQuestion[lastQ.id]) {
-    const timeSpent = (Date.now() - startTime) / 1000;
-    setTimePerQuestion((prev) => ({
-      ...prev,
-      [lastQ.id]: timeSpent,
-    }));
+          {questions.map((q) => (
+            <div
+              key={q.id}
+              style={{
+                backgroundColor: "#f1f8e9",
+                padding: "12px 15px",
+                borderRadius: "10px",
+                marginBottom: "15px",
+                lineHeight: "1.6",
+              }}
+            >
+              <strong>Question {q.id}:</strong>
+              <div style={{ marginTop: "8px" }}>
+                <strong>Your Answer:</strong>{" "}
+                {Array.isArray(answers[q.id])
+                  ? answers[q.id].join(", ")
+                  : answers[q.id] ?? "No answer selected."}
+              </div>
+              <div style={{ marginTop: "6px" }}>
+                <strong>Correct Answer:</strong>{" "}
+                {Array.isArray(q.correct_answer)
+                  ? q.correct_answer.join(", ")
+                  : q.correct_answer ?? "N/A"}
+              </div>
+              <div style={{ marginTop: "6px" }}>
+                <strong>Time Spent:</strong>{" "}
+                {timePerQuestion[q.id] !== undefined
+                  ? `${timePerQuestion[q.id].toFixed(2)} seconds`
+                  : "N/A"}
+              </div>
+            </div>
+          ))}
+
+          <div style={{ marginTop: "40px", fontWeight: "bold" }}>
+            Thank you for completing the test!
+          </div>
+        </div>
+      </ScreenBorder>
+    );
   }
 
-
-  // const q1Answer = answers[1];
-  // const q1Correct = questionsData.find((q) => q.id === 1)?.correct_answer;
-  // console.log("Question 1 Answer:", (q1Answer), "Correct Answer:", q1Correct);
-
-  // const q2Answer = answers[2];
-  // const q2Correct = questionsData.find((q) => q.id === 2)?.correct_answer;
-  // console.log("Question 2 Answer:", (q2Answer), "Correct Answer:", q2Correct);
-
-  // for (let i = 1; i <= questionsData.length; i++) {
-  //   const qAnswer = answers[i];
-  //   const qCorrect = questionsData.find((q) => q.id === i)?.correct_answer;
-
-  //   console.log(`Question ${i} Answer:`, qAnswer, "Correct Answer:", qCorrect);
-  // }
-
-  // debugging statements
-
-  // 🧮 Calculate score
-  let score = 0;
-
-  questionsData.forEach((q) => {
-    const userAns = answers[q.id];
-    const correctAns = q.correct_answer;
-
-    if (userAns !== undefined && correctAns !== undefined) {
-      // Compare numbers or strings — handle array answers too
-      if (Array.isArray(userAns)) {
-        if (userAns.length === Number(correctAns)) {
-          score++;
-        }
-      } else if (String(userAns).trim().toLowerCase() === String(correctAns).trim().toLowerCase()) {
-        score++;
-      }
-    }
-  });
-
-  submitResultsToFirebase();
-  
-
-
-  // return (
-  //   <ScreenBorder question=" Submission Summary" scrollable>
-  //     <div style={{ textAlign: "left", maxWidth: "600px", margin: "40px auto" }}>
-  //       <h2>All Done, {userInfo.name}!</h2>
-  //       <p>Here’s a summary of your responses:</p>
-
-  //       {questions.map((q) => (
-  //         <div
-  //   key={q.id}
-  //   style={{
-  //     backgroundColor: "#f1f8e9",
-  //     padding: "12px 15px",
-  //     borderRadius: "10px",
-  //     marginBottom: "15px",
-  //     lineHeight: "1.6",
-  //   }}
-  // >
-  //   <strong>Question {q.id}:</strong> <br />
-
-  //   <div style={{ marginTop: "8px" }}>
-  //     <strong>Your Answer: {typeof(answers[q.id])}</strong>{" "}
-  //     {Array.isArray(answers[q.id]) && answers[q.id].length > 0
-  //       ? answers[q.id].join(", ")
-  //       : answers[q.id] || "No answer selected."}
-  //   </div>
-
-
-  //   <div style={{ marginTop: "6px" }}>
-  //     <strong>Correct Answer: {typeof(q.correct_answer)}</strong>{" "}
-  //     {Array.isArray(q.correct_answer) && q.correct_answer.length > 0
-  //       ? q.correct_answer.join(", ")
-  //       : q.correct_answer || "No correct answer found."}
-  //   </div>
-  // </div>
-  //       ))}
-
-  //       <h3 style={{ marginTop: "30px" }}>⏱ Time per question</h3>
-        
-  //       <ul>
-  //         {questions.map((q, index) => (
-  //           <li key={q.id}>
-  //             Question {q.id}:{" "}
-  //             {timePerQuestion[index] !== undefined
-  //               ? `${timePerQuestion[index].toFixed(2)} seconds`
-  //               : "N/A"}
-  //           </li>
-  //         ))}
-  //       </ul>
-
-
-  //       <div style={{ marginTop: "40px", fontWeight: "bold" }}>
-  //         Thank you for completing the test!
-  //       </div>
-  //     </div>
-  //   </ScreenBorder>
-  // );
-  return (
-    <ScreenBorder question="Congratulations! 🎉" scrollable>
-      <div style={{ textAlign: "center", marginTop: "100px" }}>
-        <h2>Congratulations, {userInfo.name}!</h2>
-        <p>You have successfully completed the test.</p>
-      </div>
-    </ScreenBorder>
-  );
-}
-
-
-  // ✅ Question screen
+  // ✅ Question Screen
   const currentQuestion = questions[currentIndex];
 
   return (
@@ -302,53 +217,40 @@ if (currentIndex >= questions.length) {
     >
       {currentQuestion.component}
 
-      {/* Back button (bottom-left) */}
+      {/* Back button (optional) */}
       <div
         style={{
           position: "absolute",
           bottom: "20px",
           left: "20px",
-          opacity: 0.3, 
+          opacity: 0.3,
         }}
       >
-        {/* onClick={goToPrev} disabled={currentIndex === 0} */}
-        <button >
-          ⬅
-        </button>
+        {/* <button onClick={goToPrev} disabled={currentIndex === 0}>⬅</button> */}
       </div>
 
-      <div
-  style={{
-    position: "absolute",
-    bottom: "50px",
-    right: "50px",
-  }}
->
-  <button
-    onClick={goToNext}
-    style={{
-      background: "none",
-      border: "none",
-      cursor: "pointer",
-      padding: 0,
-      outline: "none",
-      transition: "transform 0.2s ease-in-out",
-    }}
-    onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
-    onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-  >
-    <img
-      src="/next.svg"
-      alt="Next"
-      style={{
-        width: "150px",
-        height: "auto",
-        display: "block",
-      }}
-    />
-  </button>
-</div>
-
+      {/* Next button */}
+      <div style={{ position: "absolute", bottom: "50px", right: "50px" }}>
+        <button
+          onClick={goToNext}
+          style={{
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            padding: 0,
+            outline: "none",
+            transition: "transform 0.2s ease-in-out",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
+          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+        >
+          <img
+            src="/next.svg"
+            alt="Next"
+            style={{ width: "150px", height: "auto", display: "block" }}
+          />
+        </button>
+      </div>
     </ScreenBorder>
   );
 };

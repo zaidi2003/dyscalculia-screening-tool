@@ -21,7 +21,7 @@ import Question17 from "./components/questions/Question17";
 import Question18 from "./components/questions/Question18";
 import Question19 from "./components/questions/Question19";
 import Question20 from "./components/questions/Question20";
-
+import RatingQuestion from "./components/questions/Rating";
 
 export interface QuestionItem {
   id: number;
@@ -195,20 +195,20 @@ export const questionsData: QuestionItem[] = [
     id: 14,
     title: (
       <>
-        What fraction of the watermelon <u> remains?</u> 
+        What fraction of the watermelon <u> has been eaten?</u> 
       </>
     ),
     component: <Question14 onAnswer={() => {}} />,
     borderColor: "#F4900C",
     headerColor: "#FFB95C", 
-    correct_answer: "5/5",
+    correct_answer: "2/5",
     type: "binary",
   },
   {
     id: 15,
     title: (
       <>
-        What fraction of the water is  <u>remaining?</u> 
+        What fraction of the water is  <u>in the cup?</u> 
       </>
     ),
     component: <Question15 onAnswer={() => {}} />,
@@ -286,7 +286,16 @@ export const questionsData: QuestionItem[] = [
     correct_answer: "9",
     type: "binary",
 
-  }
+  },
+  {
+    id: 21,
+    title: (
+      <>
+        <strong> Rate your experience completing this assessment. </strong>
+      </>
+    ),
+    component: <RatingQuestion onAnswer={() => {}}/>,
+  },
 
 
 ];
