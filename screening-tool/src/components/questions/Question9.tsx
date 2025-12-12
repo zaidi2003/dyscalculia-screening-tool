@@ -47,16 +47,16 @@ const Question9: React.FC<Question9Props> = ({ onAnswer }) => {
     >
       <div style={{ display: "flex", gap: "40px", justifyContent: "center" }}>
         <div
-          onClick={() => handleSelect("54")}
-          style={boxStyle(selected === "54")}
+          onClick={() => handleSelect("16")}
+          style={boxStyle(selected === "16")}
         >
-          54
+          16
         </div>
         <div
-          onClick={() => handleSelect("45")}
-          style={boxStyle(selected === "45")}
+          onClick={() => handleSelect("60")}
+          style={boxStyle(selected === "60")}
         >
-          45
+          60
         </div>
       </div>
     </div>

@@ -1,80 +1,95 @@
 import React, { useState } from "react";
 
-interface Question10Props {
-  onAnswer: (answer: string) => void;
+interface Question15Props {
+  onAnswer: (answer: number) => void; // ✅ now number
 }
 
-const Question10: React.FC<Question10Props> = ({ onAnswer }) => {
-  const [selected, setSelected] = useState<string>("");
+const Question15: React.FC<Question15Props> = ({ onAnswer }) => {
+  const [answer, setAnswer] = useState<number | "">("");
 
-  const options = ["1/2", "1/3", "2/3", "1/4"];
-
-  const handleSelect = (opt: string) => {
-    setSelected(opt);
-    onAnswer(opt); // send answer to parent immediately
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value === "" ? "" : Number(e.target.value); // ✅ convert to number
+    setAnswer(val);
+    if (val !== "") onAnswer(val as number); // only send number, not empty string
   };
 
   return (
     <div
       style={{
-        display: "flex",
-        justifyContent: "space-around",
-        alignItems: "center",
-        flexWrap: "wrap",
-        gap: "30px",
+        textAlign: "center",
+        borderRadius: "15px",
+        padding: "30px",
+        maxWidth: "800px",
+        margin: "0 auto",
       }}
     >
-      {/* 🖼️ Left Side Image */}
-      <div style={{ flex: "1 1 200px", textAlign: "center" }}>
-        <img
-          src="/water.png"
-          alt="fruits"
-          style={{
-            width: "400px",
-            height: "400px",
-            objectFit: "contain",
-          }}
-        />
-        
-      </div>
-
-      {/* 🔢 Right Side Options */}
+      {/* Cakes and minus sign */}
       <div
         style={{
-          flex: "1 1 200px",
-          display: "grid",
-          gridTemplateColumns: "repeat(2, 120px)",
-          gap: "25px",
+          display: "flex",
           justifyContent: "center",
+          alignItems: "center",
+          gap: "80px",
+          flexWrap: "wrap",
+          marginBottom: "30px",
         }}
       >
-        {options.map((opt) => (
-          <div
-            key={opt}
-            onClick={() => handleSelect(opt)}
-            style={{
-              backgroundColor: selected === opt ? "#4caf50" : "#fff8dc",
-              border: "3px solid #8bc34a",
-              borderRadius: "15px",
-              padding: "30px 0",
-              textAlign: "center",
-              fontSize: "32px",
-              fontWeight: "bold",
-              color: "#333",
-              cursor: "pointer",
-              transition: "0.3s",
-              boxShadow:
-                selected === opt
-                  ? "0 5px 15px rgba(76,175,80,0.5)"
-                  : "0 3px 10px rgba(0,0,0,0.1)",
-            }}
-          >
-            {opt}
-          </div>
-        ))}
+        {/* Ali's 4 cakes */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 80px)",
+            gap: "40px",
+          }}
+        >
+          {[...Array(4)].map((_, i) => (
+            <img
+              key={i}
+              src="cake.svg"
+              alt="cake"
+              style={{ width: "100px", height: "100px" }}
+            />
+          ))}
+        </div>
+
+        {/* Minus sign */}
+        <div style={{ fontSize: "70px", fontWeight: "bold", color: "#0044cc" }}>-</div>
+
+        {/* Fatima’s 2 cakes */}
+        <div style={{ display: "flex", gap: "40px" }}>
+          {[...Array(2)].map((_, i) => (
+            <img
+              key={i}
+              src="cake2.svg"
+              alt="cake2"
+              style={{ width: "100px", height: "100px" }}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Answer input */}
+      <div style={{ fontSize: "20px", color: "#4a2f00" }}>
+        <label htmlFor="answer">Answer:&nbsp;</label>
+        <input
+          id="answer"
+          type="number"
+          value={answer}
+          onChange={handleChange}
+          style={{
+            width: "80px",
+            fontSize: "18px",
+            textAlign: "center",
+            borderRadius: "8px",
+            border: "2px solid #b77b33",
+            padding: "5px",
+            backgroundColor: "#fff", // white background
+    color: "#000",           // black text
+          }}
+        />
       </div>
     </div>
   );
 };
 
-export default Question10;
+export default Question15;

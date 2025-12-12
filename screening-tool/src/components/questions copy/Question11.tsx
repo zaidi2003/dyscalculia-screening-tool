@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
-interface Question14Props {
+interface Question11Props {
   onAnswer: (answer: number) => void; // ✅ use number type
 }
 
-const Question14: React.FC<Question14Props> = ({ onAnswer }) => {
+const Question11: React.FC<Question11Props> = ({ onAnswer }) => {
   const [answer, setAnswer] = useState<number | "">("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,4 +92,4 @@ const Question14: React.FC<Question14Props> = ({ onAnswer }) => {
   );
 };
 
-export default Question14;
+export default Question11;

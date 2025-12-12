@@ -40,10 +40,10 @@ const Question5: React.FC<Question5Props> = ({ onAnswer }) => {
       >
         {/* Left box (cat) */}
         <div
-          onClick={() => handleSelect("cat")}
+          onClick={() => handleSelect("1")}
           style={{
-            backgroundColor: selected === "cat" ? "#c8f7c5" : "#fff",
-            border: selected === "cat" ? "4px solid #4caf50" : "3px solid #ddd",
+            backgroundColor: selected === "1" ? "#c8f7c5" : "#fff",
+            border: selected === "1" ? "4px solid #4caf50" : "3px solid #ddd",
             borderRadius: "15px",
             width: "200px",
             height: "200px",
@@ -55,19 +55,19 @@ const Question5: React.FC<Question5Props> = ({ onAnswer }) => {
           }}
         >
           <img
-            src="/cat.svg"
-            alt="fishes"
+            src="cat.svg"
+            alt="cat"
             style={{ width: "100px", height: "100px" }}
           />
         </div>
 
         {/* Right box (fish) */}
         <div
-          onClick={() => handleSelect("fishes")}
+          onClick={() => handleSelect("2")}
           style={{
-            backgroundColor: selected === "fishes" ? "#c8f7c5" : "#fff",
+            backgroundColor: selected === "2" ? "#c8f7c5" : "#fff",
             border:
-              selected === "fishes" ? "4px solid #4caf50" : "3px solid #ddd",
+              selected === "2" ? "4px solid #4caf50" : "3px solid #ddd",
             borderRadius: "15px",
             width: "200px",
             height: "200px",
@@ -81,7 +81,7 @@ const Question5: React.FC<Question5Props> = ({ onAnswer }) => {
         >
           
           <img
-            src="/fishes.svg"
+            src="fishes.svg"
             alt="fish"
             style={{ width: "160px", height: "160px" }}
           />

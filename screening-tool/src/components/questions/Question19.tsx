@@ -1,74 +1,80 @@
 import React, { useState } from "react";
 
 interface Question19Props {
-  onAnswer: (answer: string) => void;
+  onAnswer: (answer: number) => void; // ✅ number instead of string
 }
 
 const Question19: React.FC<Question19Props> = ({ onAnswer }) => {
-  const [selected, setSelected] = useState<string>("");
+  const [answer, setAnswer] = useState<number | "">(""); // ✅ allows empty input and number
 
-  const handleSelect = (choice: string) => {
-    setSelected(choice);
-    onAnswer(choice);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value === "" ? "" : Number(e.target.value); // ✅ convert to number
+    setAnswer(val);
+    if (val !== "") onAnswer(val as number); // ✅ only send number if not empty
   };
-
-  const boxes = [
-    { id: 1, choice: "2", img: "/clock2.png", alt: "2" },
-    { id: 2, choice: "10", img: "/clock10.png", alt: "10" },
-    { id: 3, choice: "7", img: "/clock7.png", alt: "7" },
-    { id: 4, choice: "8", img: "/clock8.png", alt: "8" },
-  ];
 
   return (
     <div
       style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#f9f9f4",
-        border: "3px solid #1C3046",
-        borderRadius: "12px",
+        textAlign: "center",
+        borderRadius: "15px",
         padding: "30px",
-        maxWidth: "700px",
+        maxWidth: "800px",
         margin: "0 auto",
       }}
     >
+      {/* Coins row */}
       <div
         style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(2, 200px)",
-          gap: "40px",
+          display: "flex",
           justifyContent: "center",
+          alignItems: "center",
+          gap: "50px",
+          flexWrap: "wrap",
+          marginBottom: "30px",
         }}
       >
-        {boxes.map((box) => (
-          <div
-            key={box.id}
-            onClick={() => handleSelect(box.choice)}
-            style={{
-              backgroundColor:
-                selected === box.choice ? "#BBDFFF" : "#fff",
-              border: "4px solid",
-              borderColor:
-                selected === box.choice ? "#1C3046" : "#ddd",
-              borderRadius: "15px",
-              width: "200px",
-              height: "200px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              transition: "border-color 0.2s, background-color 0.2s",
-            }}
-          >
-            <img
-              src={box.img}
-              alt={box.alt}
-              style={{ width: "120px", height: "120px" }}
-            />
-          </div>
-        ))}
+        <img
+          src="five_rupees.svg"
+          alt="five rupees"
+          style={{ width: "120px", height: "120px" }}
+        />
+        <img
+          src="five_rupees.svg"
+          alt="five rupees"
+          style={{ width: "120px", height: "120px" }}
+        />
+        <img
+          src="two_rupees.svg"
+          alt="two rupees"
+          style={{ width: "120px", height: "120px" }}
+        />
+        <img
+          src="rupee.svg"
+          alt="one rupee"
+          style={{ width: "120px", height: "120px" }}
+        />
+      </div>
+
+      {/* Answer input */}
+      <div style={{ fontSize: "20px", color: "#4a2f00" }}>
+        <label htmlFor="answer">Answer:&nbsp;</label>
+        <input
+          id="answer"
+          type="number"
+          value={answer}
+          onChange={handleChange}
+          style={{
+            width: "80px",
+            fontSize: "18px",
+            textAlign: "center",
+            borderRadius: "8px",
+            border: "2px solid #1C3046",
+            padding: "5px",
+            backgroundColor: "#fff", // white background
+            color: "#000",
+          }}
+        />
       </div>
     </div>
   );

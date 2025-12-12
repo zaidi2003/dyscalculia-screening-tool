@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 
-interface Question18Props {
+interface Question13Props {
   onAnswer: (answer: string) => void;
 }
 
-const Question18: React.FC<Question18Props> = ({ onAnswer }) => {
+const Question13: React.FC<Question13Props> = ({ onAnswer }) => {
   const [selected, setSelected] = useState<string>("");
 
-  const options = ["1/2", "1/3", "2/3", "1/4"];
+  const options = ["1/8", "1/6", "7/8", "2/8"];
 
   const handleSelect = (opt: string) => {
     setSelected(opt);
@@ -27,7 +27,7 @@ const Question18: React.FC<Question18Props> = ({ onAnswer }) => {
       {/* 🖼️ Left Side Image */}
       <div style={{ flex: "1 1 200px", textAlign: "center" }}>
         <img
-          src="water.png"
+          src="pizza.png"
           alt="fruits"
           style={{
             width: "400px",
@@ -77,4 +77,4 @@ const Question18: React.FC<Question18Props> = ({ onAnswer }) => {
   );
 };
 
-export default Question18;
+export default Question13;

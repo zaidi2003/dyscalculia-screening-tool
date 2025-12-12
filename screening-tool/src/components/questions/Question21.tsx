@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 
-interface Question20Props {
-  onAnswer: (answer: number) => void; // ✅ number instead of string
+interface Question21Props {
+  onAnswer: (answer: number) => void; // ✅ now expects a number
 }
 
-const Question20: React.FC<Question20Props> = ({ onAnswer }) => {
-  const [answer, setAnswer] = useState<number | "">(""); // ✅ allows empty string before input
+const Question21: React.FC<Question21Props> = ({ onAnswer }) => {
+  const [answer, setAnswer] = useState<number | "">(""); // ✅ supports empty input and number
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value === "" ? "" : Number(e.target.value); // ✅ convert to number
+    const val = e.target.value === "" ? "" : Number(e.target.value);
     setAnswer(val);
-    if (val !== "") onAnswer(val as number); // ✅ only call when not empty
+    if (val !== "") onAnswer(val as number); // ✅ only send number when not empty
   };
 
   return (
@@ -35,19 +35,24 @@ const Question20: React.FC<Question20Props> = ({ onAnswer }) => {
         }}
       >
         <img
+          src="note_100.png"
+          alt="hundred rupees"
+          style={{ height: "120px", width: "auto" }}
+        />
+        <img
+          src="note_50.png"
+          alt="fifty rupees"
+          style={{ height: "120px", width: "auto" }}
+        />
+        <img
           src="note_20.png"
           alt="twenty rupees"
           style={{ height: "120px", width: "auto" }}
         />
         <img
-          src="five_rupees.svg"
-          alt="five rupees"
-          style={{ width: "120px", height: "120px" }}
-        />
-        <img
-          src="two_rupees.svg"
-          alt="two rupees"
-          style={{ width: "120px", height: "120px" }}
+          src="note_10.png"
+          alt="ten rupees"
+          style={{ height: "120px", width: "auto" }}
         />
         <img
           src="rupee.svg"
@@ -80,4 +85,4 @@ const Question20: React.FC<Question20Props> = ({ onAnswer }) => {
   );
 };
 
-export default Question20;
+export default Question21;

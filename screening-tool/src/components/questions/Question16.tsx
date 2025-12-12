@@ -1,80 +1,77 @@
 import React, { useState } from "react";
 
 interface Question16Props {
-  onAnswer: (answer: number) => void; // ✅ number instead of string
+  onAnswer: (answer: string) => void;
 }
 
 const Question16: React.FC<Question16Props> = ({ onAnswer }) => {
-  const [answer, setAnswer] = useState<number | "">(""); // ✅ allows empty input and number
+  const [selected, setSelected] = useState<string>("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value === "" ? "" : Number(e.target.value); // ✅ convert to number
-    setAnswer(val);
-    if (val !== "") onAnswer(val as number); // ✅ only send number if not empty
+  const options = ["1/8", "1/6", "7/8", "2/8"];
+
+  const handleSelect = (opt: string) => {
+    setSelected(opt);
+    onAnswer(opt); // send answer to parent immediately
   };
 
   return (
     <div
       style={{
-        textAlign: "center",
-        borderRadius: "15px",
-        padding: "30px",
-        maxWidth: "800px",
-        margin: "0 auto",
+        display: "flex",
+        justifyContent: "space-around",
+        alignItems: "center",
+        flexWrap: "wrap",
+        gap: "30px",
       }}
     >
-      {/* Coins row */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "50px",
-          flexWrap: "wrap",
-          marginBottom: "30px",
-        }}
-      >
+      {/* 🖼️ Left Side Image */}
+      <div style={{ flex: "1 1 200px", textAlign: "center" }}>
         <img
-          src="/five_rupees.svg"
-          alt="five rupees"
-          style={{ width: "120px", height: "120px" }}
-        />
-        <img
-          src="/five_rupees.svg"
-          alt="five rupees"
-          style={{ width: "120px", height: "120px" }}
-        />
-        <img
-          src="/two_rupees.svg"
-          alt="two rupees"
-          style={{ width: "120px", height: "120px" }}
-        />
-        <img
-          src="/rupee.svg"
-          alt="one rupee"
-          style={{ width: "120px", height: "120px" }}
-        />
-      </div>
-
-      {/* Answer input */}
-      <div style={{ fontSize: "20px", color: "#4a2f00" }}>
-        <label htmlFor="answer">Answer:&nbsp;</label>
-        <input
-          id="answer"
-          type="number"
-          value={answer}
-          onChange={handleChange}
+          src="pizza.png"
+          alt="fruits"
           style={{
-            width: "80px",
-            fontSize: "18px",
-            textAlign: "center",
-            borderRadius: "8px",
-            border: "2px solid #1C3046",
-            padding: "5px",
-            backgroundColor: "#fff", // white background
-            color: "#000",
+            width: "400px",
+            height: "400px",
+            objectFit: "contain",
           }}
         />
+        
+      </div>
+
+      {/* 🔢 Right Side Options */}
+      <div
+        style={{
+          flex: "1 1 200px",
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 120px)",
+          gap: "25px",
+          justifyContent: "center",
+        }}
+      >
+        {options.map((opt) => (
+          <div
+            key={opt}
+            onClick={() => handleSelect(opt)}
+            style={{
+              backgroundColor: selected === opt ? "#4caf50" : "#fff8dc",
+              border: "3px solid #8bc34a",
+              borderRadius: "15px",
+              padding: "30px 0",
+              textAlign: "center",
+              fontSize: "32px",
+              fontWeight: "bold",
+              color: "#333",
+              cursor: "pointer",
+              transition: "0.3s",
+              boxShadow:
+                selected === opt
+                  ? "0 5px 15px rgba(76,175,80,0.5)"
+                  : "0 3px 10px rgba(0,0,0,0.1)",
+            }}
+          >
+            {opt}
+          </div>
+        ))}
       </div>
     </div>
   );

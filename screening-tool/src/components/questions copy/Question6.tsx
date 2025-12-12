@@ -38,12 +38,12 @@ const Question5: React.FC<Question5Props> = ({ onAnswer }) => {
           justifyContent: "center",
         }}
       >
-        {/* Left box (shells) */}
+        {/* Left box (cat) */}
         <div
-          onClick={() => handleSelect("1")}
+          onClick={() => handleSelect("cat")}
           style={{
-            backgroundColor: selected === "1" ? "#c8f7c5" : "#fff",
-            border: selected === "1" ? "4px solid #4caf50" : "3px solid #ddd",
+            backgroundColor: selected === "cat" ? "#c8f7c5" : "#fff",
+            border: selected === "cat" ? "4px solid #4caf50" : "3px solid #ddd",
             borderRadius: "15px",
             width: "200px",
             height: "200px",
@@ -55,34 +55,19 @@ const Question5: React.FC<Question5Props> = ({ onAnswer }) => {
           }}
         >
           <img
-            src="shell1.svg"
-            alt="shell"
-            style={{ width: "60px", height: "60px" }}
+            src="cat.svg"
+            alt="cat"
+            style={{ width: "100px", height: "100px" }}
           />
-
-          <img
-            src="shell2.svg"
-            alt="shell"
-            style={{ width: "60px", height: "60px" }}
-          />
-
-          <img
-            src="shell3.svg"
-            alt="shell"
-            style={{ width: "60px", height: "60px" }}
-          />
-
-          
-          
         </div>
 
-        {/* Right box (leaves) */}
+        {/* Right box (fish) */}
         <div
-          onClick={() => handleSelect("2")}
+          onClick={() => handleSelect("fishes")}
           style={{
-            backgroundColor: selected === "2" ? "#c8f7c5" : "#fff",
+            backgroundColor: selected === "fishes" ? "#c8f7c5" : "#fff",
             border:
-              selected === "2" ? "4px solid #4caf50" : "3px solid #ddd",
+              selected === "fishes" ? "4px solid #4caf50" : "3px solid #ddd",
             borderRadius: "15px",
             width: "200px",
             height: "200px",
@@ -94,32 +79,17 @@ const Question5: React.FC<Question5Props> = ({ onAnswer }) => {
             transition: "0.3s",
           }}
         >
+          
           <img
-            src="leaf.svg"
-            alt="leaf"
-            style={{ width: "60px", height: "60px" }}
-          />
-          <img
-            src="leaf.svg"
-            alt="leaf"
-            style={{ width: "60px", height: "60px" }}
-          />
-          <img
-            src="leaf.svg"
-            alt="leaf"
-            style={{ width: "60px", height: "60px" }}
-          />
-          <img
-            src="leaf.svg"
-            alt="leaf"
-            style={{ width: "60px", height: "60px" }}
-          />
-          <img
-            src="leaf.svg"
-            alt="leaf"
-            style={{ width: "60px", height: "60px" }}
+            src="fishes.svg"
+            alt="fish"
+            style={{ width: "160px", height: "160px" }}
           />
         </div>
+
+        
+
+        
       </div>
     </div>
   );

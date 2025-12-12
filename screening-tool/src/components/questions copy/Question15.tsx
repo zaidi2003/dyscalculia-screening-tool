@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
-interface Question18Props {
+interface Question10Props {
   onAnswer: (answer: string) => void;
 }
 
-const Question18: React.FC<Question18Props> = ({ onAnswer }) => {
+const Question10: React.FC<Question10Props> = ({ onAnswer }) => {
   const [selected, setSelected] = useState<string>("");
 
   const options = ["1/2", "1/3", "2/3", "1/4"];
@@ -77,4 +77,4 @@ const Question18: React.FC<Question18Props> = ({ onAnswer }) => {
   );
 };
 
-export default Question18;
+export default Question10;

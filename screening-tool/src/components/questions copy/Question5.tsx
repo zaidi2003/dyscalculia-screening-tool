@@ -40,10 +40,10 @@ const Question5: React.FC<Question5Props> = ({ onAnswer }) => {
       >
         {/* Left box (shells) */}
         <div
-          onClick={() => handleSelect("1")}
+          onClick={() => handleSelect("shells")}
           style={{
-            backgroundColor: selected === "1" ? "#c8f7c5" : "#fff",
-            border: selected === "1" ? "4px solid #4caf50" : "3px solid #ddd",
+            backgroundColor: selected === "shells" ? "#c8f7c5" : "#fff",
+            border: selected === "shells" ? "4px solid #4caf50" : "3px solid #ddd",
             borderRadius: "15px",
             width: "200px",
             height: "200px",
@@ -78,11 +78,11 @@ const Question5: React.FC<Question5Props> = ({ onAnswer }) => {
 
         {/* Right box (leaves) */}
         <div
-          onClick={() => handleSelect("2")}
+          onClick={() => handleSelect("leaves")}
           style={{
-            backgroundColor: selected === "2" ? "#c8f7c5" : "#fff",
+            backgroundColor: selected === "leaves" ? "#c8f7c5" : "#fff",
             border:
-              selected === "2" ? "4px solid #4caf50" : "3px solid #ddd",
+              selected === "leaves" ? "4px solid #4caf50" : "3px solid #ddd",
             borderRadius: "15px",
             width: "200px",
             height: "200px",

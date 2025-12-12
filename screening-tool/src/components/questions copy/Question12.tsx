@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 
-interface Question14Props {
-  onAnswer: (answer: number) => void; // ✅ use number type
+interface Question12Props {
+  onAnswer: (answer: number) => void; // ✅ now number
 }
 
-const Question14: React.FC<Question14Props> = ({ onAnswer }) => {
+const Question12: React.FC<Question12Props> = ({ onAnswer }) => {
   const [answer, setAnswer] = useState<number | "">("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value === "" ? "" : Number(e.target.value); // ✅ convert to number
     setAnswer(val);
-    if (val !== "") onAnswer(val as number); // only send number to parent
+    if (val !== "") onAnswer(val as number); // only send number, not empty string
   };
 
   return (
@@ -23,7 +23,7 @@ const Question14: React.FC<Question14Props> = ({ onAnswer }) => {
         margin: "0 auto",
       }}
     >
-      {/* Cakes and plus sign */}
+      {/* Cakes and minus sign */}
       <div
         style={{
           display: "flex",
@@ -52,8 +52,8 @@ const Question14: React.FC<Question14Props> = ({ onAnswer }) => {
           ))}
         </div>
 
-        {/* Plus sign */}
-        <div style={{ fontSize: "70px", fontWeight: "bold", color: "#0044cc" }}>+</div>
+        {/* Minus sign */}
+        <div style={{ fontSize: "70px", fontWeight: "bold", color: "#0044cc" }}>-</div>
 
         {/* Fatima’s 2 cakes */}
         <div style={{ display: "flex", gap: "40px" }}>
@@ -92,4 +92,4 @@ const Question14: React.FC<Question14Props> = ({ onAnswer }) => {
   );
 };
 
-export default Question14;
+export default Question12;

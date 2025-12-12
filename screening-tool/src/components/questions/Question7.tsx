@@ -1,233 +1,63 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 interface Question7Props {
-  onAnswer?: (ans: string) => void;
+  onAnswer: (answer: string) => void;
 }
 
 const Question7: React.FC<Question7Props> = ({ onAnswer }) => {
-  const groups = [
-    { count: 5, img: "/red_truck.svg" },
-    { count: 4, img: "/yellow_taxi.svg" },
-    { count: 3, img: "/green_car.svg" },
-  ];
+  const [selected, setSelected] = useState<string>("");
 
-  const numbers = [3, 4, 5];
-
-  const [droppedItems, setDroppedItems] = useState<Record<number, number>>({});
-  const [availableNumbers, setAvailableNumbers] = useState(numbers);
-
-  const handleDragStart = (e: React.DragEvent, num: number, source: string) => {
-    e.dataTransfer.setData("type", "number");
-    e.dataTransfer.setData("value", num.toString());
-    e.dataTransfer.setData("source", source); // "side" or "box"
+  const handleSelect = (choice: string) => {
+    setSelected(choice);
+    onAnswer(choice);
   };
 
-  const handleDrop = (e: React.DragEvent, groupCount: number) => {
-    e.preventDefault();
-    const value = Number(e.dataTransfer.getData("value"));
-    const source = e.dataTransfer.getData("source");
-    if (isNaN(value)) return;
-
-    setDroppedItems((prevDropped) => {
-      const currentAssignments = { ...prevDropped };
-
-      // If number already placed somewhere else → remove it from that group
-      for (const [key, val] of Object.entries(currentAssignments)) {
-        if (val === value) delete currentAssignments[Number(key)];
-      }
-
-      // Get old number that was in this box (if any)
-      const prevValue = currentAssignments[groupCount];
-
-      // Assign new one
-      currentAssignments[groupCount] = value;
-
-      // Update available numbers cleanly
-      setAvailableNumbers((prevNums) => {
-        let updated = [...prevNums];
-        // remove current number if it's new
-        if (source === "side") updated = updated.filter((n) => n !== value);
-        // add old number back if replaced
-        if (prevValue !== undefined && prevValue !== value)
-          updated.push(prevValue);
-        return Array.from(new Set(updated)).sort((a, b) => a - b);
-      });
-
-      return currentAssignments;
-    });
-  };
-
-  // Handle drag from box → drop back into right list
-  const handleReturnDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    const value = Number(e.dataTransfer.getData("value"));
-    const source = e.dataTransfer.getData("source");
-    if (source !== "box" || isNaN(value)) return;
-
-    setDroppedItems((prevDropped) => {
-      const newDropped = { ...prevDropped };
-      for (const [key, val] of Object.entries(newDropped)) {
-        if (val === value) delete newDropped[Number(key)];
-      }
-      return newDropped;
-    });
-
-    setAvailableNumbers((prevNums) => {
-      const updated = Array.from(new Set([...prevNums, value])).sort(
-        (a, b) => a - b
-      );
-      return updated;
-    });
-  };
-
-  // Notify parent only when all are placed
-  useEffect(() => {
-    if (Object.keys(droppedItems).length === groups.length) {
-      const allCorrect = groups.every(
-        (group) => droppedItems[group.count] === group.count
-      );
-      onAnswer?.(allCorrect ? "Correct" : "Incorrect");
-    }
-  }, [droppedItems]);
+  const boxStyle = (isSelected: boolean) => ({
+    backgroundColor: isSelected ? "#c8e6c9" : "#fefaf2", // light green highlight
+    border: `3px solid ${isSelected ? "#4caf50" : "#ddd"}`,
+    boxShadow: isSelected ? "0 0 0 4px #4caf50 inset" : "none",
+    borderRadius: "15px",
+    width: "200px",
+    height: "200px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "3rem",
+    fontWeight: "bold",
+    cursor: "pointer",
+    transition: "all 0.25s ease",
+    color: "#1C3046",
+  });
 
   return (
     <div
       style={{
         display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
         justifyContent: "center",
-        alignItems: "flex-start",
-        gap: "60px",
-        padding: "40px",
+        backgroundColor: "#fefaf2", // matches ScreenBorder theme
+        border: "3px solid #4caf50",
+        borderRadius: "12px",
+        padding: "30px",
+        maxWidth: "700px",
+        margin: "0 auto",
+        boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
       }}
     >
-      {/* Left: car groups */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "40px" }}>
-        {groups.map((group) => (
-          <div
-            key={group.count}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "20px",
-            }}
-          >
-            {/* Cars */}
-            <div
-              style={{
-                display: "flex",
-                gap: "10px",
-                backgroundColor: "#fefaf2",
-                borderRadius: "10px",
-                padding: "10px 20px",
-              }}
-            >
-              {Array.from({ length: group.count }).map((_, i) => (
-                <img
-                  key={i}
-                  src={group.img}
-                  alt="car"
-                  draggable={false}
-                  style={{ width: "50px", height: "50px" }}
-                />
-              ))}
-            </div>
-
-            {/* Drop box */}
-            <div
-              onDrop={(e) => handleDrop(e, group.count)}
-              onDragOver={(e) => e.preventDefault()}
-              style={{
-                width: "70px",
-                height: "70px",
-                border: "3px dashed #4caf50",
-                borderRadius: "10px",
-                backgroundColor: "#ffffff",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                fontSize: "1.5rem",
-                fontWeight: "bold",
-                color: "#333",
-                cursor: "pointer",
-              }}
-            >
-              {droppedItems[group.count] && (
-                <div
-                  draggable
-                  onDragStart={(e) =>
-                    handleDragStart(e, droppedItems[group.count], "box")
-                  }
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    backgroundColor: "#c8e6c9",
-                    borderRadius: "8px",
-                    cursor: "grab",
-                  }}
-                >
-                  {droppedItems[group.count]}
-                </div>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Right: number list */}
-      <div
-        onDrop={handleReturnDrop}
-        onDragOver={(e) => e.preventDefault()}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          padding: "10px",
-          border: "3px dashed #bbb",
-          borderRadius: "12px",
-          minHeight: "300px",
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "#f9fff9",
-        }}
-      >
-        {availableNumbers.map((num) => (
-          <div
-            key={num}
-            draggable
-            onDragStart={(e) => handleDragStart(e, num, "side")}
-            style={{
-              width: "70px",
-              height: "70px",
-              border: "2px solid #4caf50",
-              borderRadius: "10px",
-              backgroundColor: "#c8e6c9",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              fontSize: "1.5rem",
-              fontWeight: "bold",
-              color: "#000",
-              cursor: "grab",
-              userSelect: "none",
-            }}
-          >
-            {num}
-          </div>
-        ))}
-        {availableNumbers.length === 0 && (
-          <div
-            style={{
-              fontSize: "1rem",
-              color: "#666",
-              fontStyle: "italic",
-            }}
-          >
-            (Drag numbers back here)
-          </div>
-        )}
+      <div style={{ display: "flex", gap: "40px", justifyContent: "center" }}>
+        <div
+          onClick={() => handleSelect("54")}
+          style={boxStyle(selected === "54")}
+        >
+          54
+        </div>
+        <div
+          onClick={() => handleSelect("45")}
+          style={boxStyle(selected === "45")}
+        >
+          45
+        </div>
       </div>
     </div>
   );

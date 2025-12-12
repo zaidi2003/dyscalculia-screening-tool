@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 
-interface Question20Props {
+interface Question16Props {
   onAnswer: (answer: number) => void; // ✅ number instead of string
 }
 
-const Question20: React.FC<Question20Props> = ({ onAnswer }) => {
-  const [answer, setAnswer] = useState<number | "">(""); // ✅ allows empty string before input
+const Question16: React.FC<Question16Props> = ({ onAnswer }) => {
+  const [answer, setAnswer] = useState<number | "">(""); // ✅ allows empty input and number
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value === "" ? "" : Number(e.target.value); // ✅ convert to number
     setAnswer(val);
-    if (val !== "") onAnswer(val as number); // ✅ only call when not empty
+    if (val !== "") onAnswer(val as number); // ✅ only send number if not empty
   };
 
   return (
@@ -35,9 +35,9 @@ const Question20: React.FC<Question20Props> = ({ onAnswer }) => {
         }}
       >
         <img
-          src="note_20.png"
-          alt="twenty rupees"
-          style={{ height: "120px", width: "auto" }}
+          src="five_rupees.svg"
+          alt="five rupees"
+          style={{ width: "120px", height: "120px" }}
         />
         <img
           src="five_rupees.svg"
@@ -72,7 +72,7 @@ const Question20: React.FC<Question20Props> = ({ onAnswer }) => {
             border: "2px solid #1C3046",
             padding: "5px",
             backgroundColor: "#fff", // white background
-            color: "#000",           // black text
+            color: "#000",
           }}
         />
       </div>
@@ -80,4 +80,4 @@ const Question20: React.FC<Question20Props> = ({ onAnswer }) => {
   );
 };
 
-export default Question20;
+export default Question16;

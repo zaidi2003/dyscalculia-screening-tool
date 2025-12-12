@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
-interface Question12Props {
+interface Question8eProps {
   onAnswer: (answer: number) => void;
 }
 
-const Question12: React.FC<Question12Props> = ({ onAnswer }) => {
+const Question8e: React.FC<Question8eProps> = ({ onAnswer }) => {
   const [selected, setSelected] = useState<number | null>(null);
 
   // Start and end values
@@ -159,4 +159,4 @@ const Question12: React.FC<Question12Props> = ({ onAnswer }) => {
   );
 };
 
-export default Question12;
+export default Question8e;

@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 
-interface Question12Props {
+interface Question8Props {
   onAnswer: (answer: number) => void;
 }
 
-const Question12: React.FC<Question12Props> = ({ onAnswer }) => {
+const Question8: React.FC<Question8Props> = ({ onAnswer }) => {
   const [selected, setSelected] = useState<number | null>(null);
 
   // Start and end values
-  const start = 20;
-  const end = 30;
-  const count = 11; // 10 ticks, including start and end
+  const start = 0;
+  const end = 100;
+  const count = 10; // 10 ticks, including start and end
 
   // Generate the numbers based on the range
   const step = (end - start) / (count - 1);
@@ -159,4 +159,4 @@ const Question12: React.FC<Question12Props> = ({ onAnswer }) => {
   );
 };
 
-export default Question12;
+export default Question8;

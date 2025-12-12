@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
-interface Question20Props {
+interface Question17Props {
   onAnswer: (answer: number) => void; // ✅ number instead of string
 }
 
-const Question20: React.FC<Question20Props> = ({ onAnswer }) => {
+const Question17: React.FC<Question17Props> = ({ onAnswer }) => {
   const [answer, setAnswer] = useState<number | "">(""); // ✅ allows empty string before input
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,4 +80,4 @@ const Question20: React.FC<Question20Props> = ({ onAnswer }) => {
   );
 };
 
-export default Question20;
+export default Question17;

@@ -1,92 +1,63 @@
 import React, { useState } from "react";
 
 interface Question11Props {
-  onAnswer: (answer: number) => void; // ✅ use number type
+  onAnswer: (answer: string) => void;
 }
 
 const Question11: React.FC<Question11Props> = ({ onAnswer }) => {
-  const [answer, setAnswer] = useState<number | "">("");
+  const [selected, setSelected] = useState<string>("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value === "" ? "" : Number(e.target.value); // ✅ convert to number
-    setAnswer(val);
-    if (val !== "") onAnswer(val as number); // only send number to parent
+  const handleSelect = (choice: string) => {
+    setSelected(choice);
+    onAnswer(choice);
   };
+
+  const boxStyle = (isSelected: boolean) => ({
+    backgroundColor: isSelected ? "#c8e6c9" : "#fefaf2", // greenish select, soft base
+    border: `3px solid ${isSelected ? "#4caf50" : "#ddd"}`,
+    boxShadow: isSelected ? "0 0 0 4px #4caf50 inset" : "none",
+    borderRadius: "15px",
+    width: "200px",
+    height: "200px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "3rem",
+    fontWeight: "bold",
+    cursor: "pointer",
+    transition: "all 0.25s ease",
+    color: "#1C3046",
+  });
 
   return (
     <div
       style={{
-        textAlign: "center",
-        borderRadius: "15px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#fefaf2", // match ScreenBorder background
+        border: "3px solid #4caf50",
+        borderRadius: "12px",
         padding: "30px",
-        maxWidth: "800px",
+        maxWidth: "700px",
         margin: "0 auto",
+        boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
       }}
     >
-      {/* Cakes and plus sign */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "80px",
-          flexWrap: "wrap",
-          marginBottom: "30px",
-        }}
-      >
-        {/* Ali's 4 cakes */}
+      <div style={{ display: "flex", gap: "40px", justifyContent: "center" }}>
         <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(2, 80px)",
-            gap: "40px",
-          }}
+          onClick={() => handleSelect("11")}
+          style={boxStyle(selected === "11")}
         >
-          {[...Array(4)].map((_, i) => (
-            <img
-              key={i}
-              src="/cake.svg"
-              alt="cake"
-              style={{ width: "100px", height: "100px" }}
-            />
-          ))}
+          11
         </div>
-
-        {/* Plus sign */}
-        <div style={{ fontSize: "70px", fontWeight: "bold", color: "#0044cc" }}>+</div>
-
-        {/* Fatima’s 2 cakes */}
-        <div style={{ display: "flex", gap: "40px" }}>
-          {[...Array(2)].map((_, i) => (
-            <img
-              key={i}
-              src="/cake2.svg"
-              alt="cake2"
-              style={{ width: "100px", height: "100px" }}
-            />
-          ))}
+        <div
+          onClick={() => handleSelect("101")}
+          style={boxStyle(selected === "101")}
+        >
+          101
         </div>
-      </div>
-
-      {/* Answer input */}
-      <div style={{ fontSize: "20px", color: "#4a2f00" }}>
-        <label htmlFor="answer">Answer:&nbsp;</label>
-        <input
-          id="answer"
-          type="number"
-          value={answer}
-          onChange={handleChange}
-          style={{
-            width: "80px",
-            fontSize: "18px",
-            textAlign: "center",
-            borderRadius: "8px",
-            border: "2px solid #b77b33",
-            padding: "5px",
-            backgroundColor: "#fff", // white background
-    color: "#000",           // black text
-          }}
-        />
       </div>
     </div>
   );

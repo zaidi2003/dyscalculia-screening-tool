@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
-interface Question8Props {
+interface Question9Props {
   onAnswer: (answer: string) => void;
 }
 
-const Question8: React.FC<Question8Props> = ({ onAnswer }) => {
+const Question9: React.FC<Question9Props> = ({ onAnswer }) => {
   const [selected, setSelected] = useState<string>("");
 
   const handleSelect = (choice: string) => {
@@ -47,20 +47,20 @@ const Question8: React.FC<Question8Props> = ({ onAnswer }) => {
     >
       <div style={{ display: "flex", gap: "40px", justifyContent: "center" }}>
         <div
-          onClick={() => handleSelect("13")}
-          style={boxStyle(selected === "13")}
+          onClick={() => handleSelect("54")}
+          style={boxStyle(selected === "54")}
         >
-          13
+          54
         </div>
         <div
-          onClick={() => handleSelect("30")}
-          style={boxStyle(selected === "30")}
+          onClick={() => handleSelect("45")}
+          style={boxStyle(selected === "45")}
         >
-          30
+          45
         </div>
       </div>
     </div>
   );
 };
 
-export default Question8;
+export default Question9;

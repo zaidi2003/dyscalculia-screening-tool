@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
-interface Question8Props {
+interface Question10Props {
   onAnswer: (answer: string) => void;
 }
 
-const Question8: React.FC<Question8Props> = ({ onAnswer }) => {
+const Question10: React.FC<Question10Props> = ({ onAnswer }) => {
   const [selected, setSelected] = useState<string>("");
 
   const handleSelect = (choice: string) => {
@@ -13,7 +13,7 @@ const Question8: React.FC<Question8Props> = ({ onAnswer }) => {
   };
 
   const boxStyle = (isSelected: boolean) => ({
-    backgroundColor: isSelected ? "#c8e6c9" : "#fefaf2", // light green highlight
+    backgroundColor: isSelected ? "#c8e6c9" : "#fefaf2", // greenish select, soft base
     border: `3px solid ${isSelected ? "#4caf50" : "#ddd"}`,
     boxShadow: isSelected ? "0 0 0 4px #4caf50 inset" : "none",
     borderRadius: "15px",
@@ -36,7 +36,7 @@ const Question8: React.FC<Question8Props> = ({ onAnswer }) => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#fefaf2", // matches ScreenBorder theme
+        backgroundColor: "#fefaf2", // match ScreenBorder background
         border: "3px solid #4caf50",
         borderRadius: "12px",
         padding: "30px",
@@ -47,20 +47,20 @@ const Question8: React.FC<Question8Props> = ({ onAnswer }) => {
     >
       <div style={{ display: "flex", gap: "40px", justifyContent: "center" }}>
         <div
-          onClick={() => handleSelect("13")}
-          style={boxStyle(selected === "13")}
+          onClick={() => handleSelect("15")}
+          style={boxStyle(selected === "15")}
         >
-          13
+          15
         </div>
         <div
-          onClick={() => handleSelect("30")}
-          style={boxStyle(selected === "30")}
+          onClick={() => handleSelect("20")}
+          style={boxStyle(selected === "20")}
         >
-          30
+          20
         </div>
       </div>
     </div>
   );
 };
 
-export default Question8;
+export default Question10;
