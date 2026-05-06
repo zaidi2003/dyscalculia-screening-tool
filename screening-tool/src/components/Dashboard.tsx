@@ -213,7 +213,7 @@ const Dashboard: React.FC = () => {
                     backgroundColor: colors.bg,
                     border: `2px solid ${colors.border}`,
                     borderRadius: "14px",
-                    overflow: "hidden",
+                    overflow: "visible",
                     boxShadow: "0 2px 12px rgba(0,0,0,0.07)",
                   }}
                 >
