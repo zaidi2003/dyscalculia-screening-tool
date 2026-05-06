@@ -95,22 +95,7 @@ const App: React.FC = () => {
     return results;
   };
 
-  const submitResultsToFirebase = async () => {
-    const results = calculateResults();
-    try {
-      const docRef = doc(db, "results", `${userInfo.name}-${Date.now()}`);
-      await setDoc(docRef, {
-        userInfo,
-        results,
-        timestamp: new Date().toISOString(),
-      });
-      console.log("Offline mode: Results", { userInfo, results });
 
-      console.log("✅ Results sent to Firebase!");
-    } catch (error) {
-      console.error("❌ Firestore upload failed:", error);
-    }
-  };
 
   const downloadCSV = () => {
     const results = calculateResults();
@@ -244,6 +229,22 @@ const App: React.FC = () => {
     } catch (error) {
       console.error("❌ Could not reach API:", error);
       return null;
+    }
+  };
+
+  const submitResultsToFirebase = async () => {
+    const payload = buildApiPayload();
+    if (!payload) return;
+    try {
+      const docRef = doc(db, "results", `${userInfo.name}-${Date.now()}`);
+      await setDoc(docRef, {
+        userInfo,
+        payload,
+        timestamp: new Date().toISOString(),
+      });
+      console.log("✅ Results sent to Firebase!");
+    } catch (error) {
+      console.error("❌ Firestore upload failed:", error);
     }
   };
 
