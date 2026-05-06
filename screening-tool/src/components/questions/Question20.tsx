@@ -1,80 +1,85 @@
 import React, { useState } from "react";
 
 interface Question20Props {
-  onAnswer: (answer: number) => void; // ✅ number instead of string
+  onAnswer: (answer: number) => void;
 }
 
 const Question20: React.FC<Question20Props> = ({ onAnswer }) => {
-  const [answer, setAnswer] = useState<number | "">(""); // ✅ allows empty string before input
+  const [answer, setAnswer] = useState<number | "">("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value === "" ? "" : Number(e.target.value); // ✅ convert to number
+    const val = e.target.value === "" ? "" : Number(e.target.value);
     setAnswer(val);
-    if (val !== "") onAnswer(val as number); // ✅ only call when not empty
+    if (val !== "") onAnswer(val as number);
   };
 
   return (
-    <div
-      style={{
-        textAlign: "center",
-        borderRadius: "15px",
-        padding: "30px",
-        maxWidth: "800px",
-        margin: "0 auto",
-      }}
-    >
-      {/* Coins row */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "50px",
-          flexWrap: "wrap",
-          marginBottom: "30px",
-        }}
-      >
-        <img
-          src="note_20.png"
-          alt="twenty rupees"
-          style={{ height: "120px", width: "auto" }}
-        />
-        <img
-          src="five_rupees.svg"
-          alt="five rupees"
-          style={{ width: "120px", height: "120px" }}
-        />
-        <img
-          src="two_rupees.svg"
-          alt="two rupees"
-          style={{ width: "120px", height: "120px" }}
-        />
-        <img
-          src="rupee.svg"
-          alt="one rupee"
-          style={{ width: "120px", height: "120px" }}
-        />
-      </div>
+    <div>
+      <style>{`
+        .q20-wrapper {
+          text-align: center;
+          border-radius: 15px;
+          padding: 30px;
+          max-width: 800px;
+          margin: 0 auto;
+        }
 
-      {/* Answer input */}
-      <div style={{ fontSize: "20px", color: "#4a2f00" }}>
-        <label htmlFor="answer">Answer:&nbsp;</label>
-        <input
-          id="answer"
-          type="number"
-          value={answer}
-          onChange={handleChange}
-          style={{
-            width: "80px",
-            fontSize: "18px",
-            textAlign: "center",
-            borderRadius: "8px",
-            border: "2px solid #1C3046",
-            padding: "5px",
-            backgroundColor: "#fff", // white background
-            color: "#000",           // black text
-          }}
-        />
+        .q20-coins {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 50px;
+          flex-wrap: wrap;
+          margin-bottom: 30px;
+        }
+
+        .q20-coin {
+          width: 100px;
+          height: 100px;
+        }
+
+        .q20-note {
+          height: 100px;
+          width: auto;
+        }
+
+        @media (max-width: 480px) {
+          .q20-coins {
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+          }
+        }
+      `}</style>
+
+      <div className="q20-wrapper">
+        <div className="q20-coins">
+          <img src="note_20.png"    alt="twenty rupees" className="q20-note" />
+          <img src="five_rupees.svg" alt="five rupees"  className="q20-coin" />
+          <img src="two_rupees.svg"  alt="two rupees"   className="q20-coin" />
+          <img src="rupee.svg"       alt="one rupee"    className="q20-coin" />
+        </div>
+
+        <div style={{ fontSize: "20px", color: "#4a2f00" }}>
+          <label htmlFor="answer">Answer:&nbsp;</label>
+          <input
+            id="answer"
+            type="number"
+            value={answer}
+            onChange={handleChange}
+            style={{
+              width: "80px",
+              fontSize: "18px",
+              textAlign: "center",
+              borderRadius: "8px",
+              border: "2px solid #1C3046",
+              padding: "5px",
+              backgroundColor: "#fff",
+              color: "#000",
+            }}
+          />
+        </div>
       </div>
     </div>
   );

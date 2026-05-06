@@ -15,7 +15,7 @@ const ScreenBorder: React.FC<ScreenBorderProps> = ({
   borderColor = "#4caf50",
   headerColor = "#c8e6c9",
   backgroundColor = "#fefaf2",
-  scrollable = false,                // ✅ Default = not scrollable
+  scrollable = false,
 }) => {
   return (
     <div
@@ -27,10 +27,10 @@ const ScreenBorder: React.FC<ScreenBorderProps> = ({
         bottom: 0,
         border: `8px solid ${borderColor}`,
         boxSizing: "border-box",
-        backgroundColor: backgroundColor,
+        backgroundColor,
         display: "flex",
         flexDirection: "column",
-        overflow: "hidden", // prevents background scroll
+        overflow: "hidden",
       }}
     >
       {/* Header */}
@@ -39,9 +39,10 @@ const ScreenBorder: React.FC<ScreenBorderProps> = ({
           width: "100%",
           backgroundColor: headerColor,
           textAlign: "left",
-          padding: "20px 40px",
+          // clamp(min, preferred, max) — scales between screen sizes
+          padding: "clamp(12px, 3vw, 20px) clamp(16px, 5vw, 40px)",
           fontWeight: "bold",
-          fontSize: "1.8rem",
+          fontSize: "clamp(1.1rem, 4vw, 1.8rem)",  // shrinks on narrow screens
           fontFamily: "'Comic Neue', sans-serif",
           color: "#000000ff",
           flexShrink: 0,
@@ -50,12 +51,12 @@ const ScreenBorder: React.FC<ScreenBorderProps> = ({
         {question}
       </div>
 
-      {/* Main content area */}
+      {/* Main content */}
       <div
         style={{
           flex: 1,
-          overflowY: scrollable ? "auto" : "hidden", // ✅ scrollable toggle
-          padding: "40px 20px",
+          overflowY: scrollable ? "auto" : "hidden",
+          padding: "clamp(16px, 4vw, 40px) clamp(12px, 3vw, 20px)",
           textAlign: "center",
         }}
       >

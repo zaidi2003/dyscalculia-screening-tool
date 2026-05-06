@@ -15,11 +15,15 @@ const Question24: React.FC<Question24Props> = ({ onAnswer }) => {
 
   const [droppedItems, setDroppedItems] = useState<Record<number, number>>({});
   const [availableNumbers, setAvailableNumbers] = useState(numbers);
+  const [selectedNum, setSelectedNum] = useState<number | null>(null); // mobile only
 
+  const isMobile = typeof window !== "undefined" && window.innerWidth <= 480;
+
+  // ── PC: drag handlers (unchanged) ──────────────────────────────────────────
   const handleDragStart = (e: React.DragEvent, num: number, source: string) => {
     e.dataTransfer.setData("type", "number");
     e.dataTransfer.setData("value", num.toString());
-    e.dataTransfer.setData("source", source); // "side" or "box"
+    e.dataTransfer.setData("source", source);
   };
 
   const handleDrop = (e: React.DragEvent, groupCount: number) => {
@@ -27,27 +31,32 @@ const Question24: React.FC<Question24Props> = ({ onAnswer }) => {
     const value = Number(e.dataTransfer.getData("value"));
     const source = e.dataTransfer.getData("source");
     if (isNaN(value)) return;
+    placeNumber(value, groupCount, source === "side");
+  };
 
+  const handleReturnDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    const value = Number(e.dataTransfer.getData("value"));
+    const source = e.dataTransfer.getData("source");
+    if (source !== "box" || isNaN(value)) return;
+    returnNumber(value);
+  };
+
+  // ── Shared logic ───────────────────────────────────────────────────────────
+  const placeNumber = (value: number, groupCount: number, fromSide: boolean) => {
     setDroppedItems((prevDropped) => {
       const currentAssignments = { ...prevDropped };
 
-      // If number already placed somewhere else → remove it from that group
       for (const [key, val] of Object.entries(currentAssignments)) {
         if (val === value) delete currentAssignments[Number(key)];
       }
 
-      // Get old number that was in this box (if any)
       const prevValue = currentAssignments[groupCount];
-
-      // Assign new one
       currentAssignments[groupCount] = value;
 
-      // Update available numbers cleanly
       setAvailableNumbers((prevNums) => {
         let updated = [...prevNums];
-        // remove current number if it's new
-        if (source === "side") updated = updated.filter((n) => n !== value);
-        // add old number back if replaced
+        if (fromSide) updated = updated.filter((n) => n !== value);
         if (prevValue !== undefined && prevValue !== value)
           updated.push(prevValue);
         return Array.from(new Set(updated)).sort((a, b) => a - b);
@@ -57,13 +66,7 @@ const Question24: React.FC<Question24Props> = ({ onAnswer }) => {
     });
   };
 
-  // Handle drag from box → drop back into right list
-  const handleReturnDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    const value = Number(e.dataTransfer.getData("value"));
-    const source = e.dataTransfer.getData("source");
-    if (source !== "box" || isNaN(value)) return;
-
+  const returnNumber = (value: number) => {
     setDroppedItems((prevDropped) => {
       const newDropped = { ...prevDropped };
       for (const [key, val] of Object.entries(newDropped)) {
@@ -71,16 +74,27 @@ const Question24: React.FC<Question24Props> = ({ onAnswer }) => {
       }
       return newDropped;
     });
-
-    setAvailableNumbers((prevNums) => {
-      const updated = Array.from(new Set([...prevNums, value])).sort(
-        (a, b) => a - b
-      );
-      return updated;
-    });
+    setAvailableNumbers((prevNums) =>
+      Array.from(new Set([...prevNums, value])).sort((a, b) => a - b)
+    );
   };
 
-  // Notify parent only when all are placed
+  // ── Mobile: tap handlers ───────────────────────────────────────────────────
+  const handleTapNumber = (num: number) => {
+    setSelectedNum((prev) => (prev === num ? null : num));
+  };
+
+  const handleTapBox = (groupCount: number) => {
+    if (selectedNum !== null) {
+      // Place selected number into box
+      placeNumber(selectedNum, groupCount, true);
+      setSelectedNum(null);
+    } else if (droppedItems[groupCount] !== undefined) {
+      // Tap filled box → return number to list
+      returnNumber(droppedItems[groupCount]);
+    }
+  };
+
   useEffect(() => {
     if (Object.keys(droppedItems).length === groups.length) {
       const allCorrect = groups.every(
@@ -91,143 +105,224 @@ const Question24: React.FC<Question24Props> = ({ onAnswer }) => {
   }, [droppedItems]);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "flex-start",
-        gap: "60px",
-        padding: "40px",
-      }}
-    >
-      {/* Left: car groups */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "40px" }}>
-        {groups.map((group) => (
-          <div
-            key={group.count}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "20px",
-            }}
-          >
-            {/* Cars */}
+    <div>
+      <style>{`
+        .q24-outer {
+          display: flex;
+          justify-content: center;
+          align-items: flex-start;
+          gap: 60px;
+          padding: 40px;
+        }
+
+        .q24-groups {
+          display: flex;
+          flex-direction: column;
+          gap: 40px;
+        }
+
+        .q24-row {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+        }
+
+        .q24-cars {
+          display: flex;
+          gap: 10px;
+          background-color: #fefaf2;
+          border-radius: 10px;
+          padding: 10px 20px;
+        }
+
+        .q24-car {
+          width: 50px;
+          height: 50px;
+        }
+
+        .q24-dropbox {
+          width: 70px;
+          height: 70px;
+          border: 3px dashed #4caf50;
+          border-radius: 10px;
+          background-color: #ffffff;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 1.5rem;
+          font-weight: bold;
+          color: #333;
+          cursor: pointer;
+          flex-shrink: 0;
+        }
+
+        .q24-placed {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: #c8e6c9;
+          border-radius: 8px;
+          cursor: grab;
+        }
+
+        .q24-numlist {
+          display: flex;
+          flex-direction: column;
+          gap: 30px;
+          padding: 10px;
+          border: 3px dashed #bbb;
+          border-radius: 12px;
+          min-height: 300px;
+          justify-content: center;
+          align-items: center;
+          background-color: #f9fff9;
+        }
+
+        .q24-numbox {
+          width: 70px;
+          height: 70px;
+          border: 2px solid #4caf50;
+          border-radius: 10px;
+          background-color: #c8e6c9;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 1.5rem;
+          font-weight: bold;
+          color: #000;
+          cursor: grab;
+          user-select: none;
+        }
+
+        .q24-hint {
+          font-size: 0.85rem;
+          color: #4caf50;
+          font-style: italic;
+          text-align: center;
+          margin-bottom: 8px;
+          width: 100%;
+        }
+
+        @media (max-width: 480px) {
+          .q24-outer {
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            padding: 16px;
+          }
+
+          .q24-groups {
+            gap: 16px;
+            width: 100%;
+          }
+
+          .q24-row {
+            gap: 10px;
+            justify-content: space-between;
+          }
+
+          .q24-cars {
+            gap: 6px;
+            padding: 8px 10px;
+            flex-wrap: wrap;
+            max-width: 220px;
+          }
+
+          .q24-car {
+            width: 36px;
+            height: 36px;
+          }
+
+          .q24-numlist {
+            flex-direction: row;
+            flex-wrap: wrap;
+            min-height: unset;
+            width: 100%;
+            gap: 12px;
+            justify-content: center;
+            padding: 12px;
+          }
+        }
+      `}</style>
+
+      <div className="q24-outer">
+        {/* Left: car groups */}
+        <div className="q24-groups">
+          {groups.map((group) => (
+            <div key={group.count} className="q24-row">
+              {/* Cars */}
+              <div className="q24-cars">
+                {Array.from({ length: group.count }).map((_, i) => (
+                  <img
+                    key={i}
+                    src={group.img}
+                    alt="car"
+                    draggable={false}
+                    className="q24-car"
+                  />
+                ))}
+              </div>
+
+              {/* Drop / tap box */}
+              <div
+                className="q24-dropbox"
+                onDrop={(e) => handleDrop(e, group.count)}
+                onDragOver={(e) => e.preventDefault()}
+                onClick={() => handleTapBox(group.count)}
+                style={{
+                  borderColor: selectedNum !== null ? "#ff9800" : "#4caf50",
+                }}
+              >
+                {droppedItems[group.count] !== undefined && (
+                  <div
+                    draggable
+                    onDragStart={(e) =>
+                      handleDragStart(e, droppedItems[group.count], "box")
+                    }
+                    className="q24-placed"
+                  >
+                    {droppedItems[group.count]}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Right: number list */}
+        <div
+          className="q24-numlist"
+          onDrop={handleReturnDrop}
+          onDragOver={(e) => e.preventDefault()}
+        >
+          <div className="q24-hint">
+            {selectedNum !== null
+              ? `Tap a box to place ${selectedNum}`
+              : "Tap a number, then tap a box to place"}
+          </div>
+          {availableNumbers.map((num) => (
             <div
+              key={num}
+              draggable
+              onDragStart={(e) => handleDragStart(e, num, "side")}
+              onClick={() => handleTapNumber(num)}
+              className="q24-numbox"
               style={{
-                display: "flex",
-                gap: "10px",
-                backgroundColor: "#fefaf2",
-                borderRadius: "10px",
-                padding: "10px 20px",
+                outline: selectedNum === num ? "3px solid #ff9800" : "none",
+                backgroundColor: selectedNum === num ? "#ffe0b2" : "#c8e6c9",
               }}
             >
-              {Array.from({ length: group.count }).map((_, i) => (
-                <img
-                  key={i}
-                  src={group.img}
-                  alt="car"
-                  draggable={false}
-                  style={{ width: "50px", height: "50px" }}
-                />
-              ))}
+              {num}
             </div>
-
-            {/* Drop box */}
-            <div
-              onDrop={(e) => handleDrop(e, group.count)}
-              onDragOver={(e) => e.preventDefault()}
-              style={{
-                width: "70px",
-                height: "70px",
-                border: "3px dashed #4caf50",
-                borderRadius: "10px",
-                backgroundColor: "#ffffff",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                fontSize: "1.5rem",
-                fontWeight: "bold",
-                color: "#333",
-                cursor: "pointer",
-              }}
-            >
-              {droppedItems[group.count] && (
-                <div
-                  draggable
-                  onDragStart={(e) =>
-                    handleDragStart(e, droppedItems[group.count], "box")
-                  }
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    backgroundColor: "#c8e6c9",
-                    borderRadius: "8px",
-                    cursor: "grab",
-                  }}
-                >
-                  {droppedItems[group.count]}
-                </div>
-              )}
+          ))}
+          {availableNumbers.length === 0 && (
+            <div style={{ fontSize: "1rem", color: "#666", fontStyle: "italic" }}>
+              (Tap a box to return)
             </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Right: number list */}
-      <div
-        onDrop={handleReturnDrop}
-        onDragOver={(e) => e.preventDefault()}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          padding: "10px",
-          border: "3px dashed #bbb",
-          borderRadius: "12px",
-          minHeight: "300px",
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "#f9fff9",
-        }}
-      >
-        {availableNumbers.map((num) => (
-          <div
-            key={num}
-            draggable
-            onDragStart={(e) => handleDragStart(e, num, "side")}
-            style={{
-              width: "70px",
-              height: "70px",
-              border: "2px solid #4caf50",
-              borderRadius: "10px",
-              backgroundColor: "#c8e6c9",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              fontSize: "1.5rem",
-              fontWeight: "bold",
-              color: "#000",
-              cursor: "grab",
-              userSelect: "none",
-            }}
-          >
-            {num}
-          </div>
-        ))}
-        {availableNumbers.length === 0 && (
-          <div
-            style={{
-              fontSize: "1rem",
-              color: "#666",
-              fontStyle: "italic",
-            }}
-          >
-            (Drag numbers back here)
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

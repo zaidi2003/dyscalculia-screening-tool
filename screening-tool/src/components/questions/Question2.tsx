@@ -6,25 +6,15 @@ interface Question2Props {
 
 const Question2: React.FC<Question2Props> = ({ onAnswer }) => {
   const [selected, setSelected] = useState<string[]>([]);
-  
-  // Car positions relative to the road SVG
+
   const cars = [
-    { 
-      id: "Car 1", 
-      position: { x: 500, y: 400 },
-      image: "red_car.svg"
-    },
-    { 
-      id: "Car 2", 
-      position: { x: 1000, y: 50 }, 
-      image: "blue_car.svg"
-    },
-    { 
-      id: "Car 3", 
-      position: { x: 1500, y: 300 },
-      image: "green_car1.svg"
-    },
+    { id: "Car 1", position: { x: 500,  y: 400 }, image: "red_car.svg"    },
+    { id: "Car 2", position: { x: 1000, y: 50  }, image: "blue_car.svg"   },
+    { id: "Car 3", position: { x: 1500, y: 300 }, image: "green_car1.svg" },
   ];
+
+  const CAR_W_PERCENT = (120 / 1997) * 110;
+  const CAR_H_PERCENT = (60  / 695)  * 110;
 
   const toggleCar = (carId: string) => {
     const newSelected = selected.includes(carId)
@@ -35,16 +25,16 @@ const Question2: React.FC<Question2Props> = ({ onAnswer }) => {
   };
 
   return (
-    <div style={{ 
-      position: "relative", 
-      width: "100%", 
-      height: "100vh", 
+    <div style={{
+      position: "relative",
+      width: "100%",
+      height: "100vh",
       overflow: "hidden",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
     }}>
-      {/* Road SVG Container */}
+      {/* Road + Cars container */}
       <div
         style={{
           position: "relative",
@@ -54,29 +44,27 @@ const Question2: React.FC<Question2Props> = ({ onAnswer }) => {
           aspectRatio: "1997 / 695",
         }}
       >
-        {/* Road SVG */}
-        <img 
-          src="road.svg" 
+        <img
+          src="road.svg"
           alt="Road"
-          style={{
-            width: "100%",
-            height: "100%",
-            display: "block"
-          }}
+          style={{ width: "100%", height: "100%", display: "block" }}
         />
 
-        {/* Cars positioned within the SVG coordinate system */}
         {cars.map((car) => (
           <div
             key={car.id}
             onClick={() => toggleCar(car.id)}
             style={{
               position: "absolute",
-              left: `calc(${(car.position.x / 1997) * 100}% - 60px)`,
-              top: `calc(${(car.position.y / 695) * 100}% - 30px)`,
+              left: `${(car.position.x / 1997) * 100}%`,
+              top:  `${(car.position.y / 695)  * 100}%`,
+              transform: selected.includes(car.id)
+                ? "translate(-50%, -50%) scale(1.2)"
+                : "translate(-50%, -50%) scale(1)",
+              width:  `max(${CAR_W_PERCENT}%, 80px)`,
+              height: `max(${CAR_H_PERCENT}%, 40px)`,
               cursor: "pointer",
-              transition: "transform 0.3s ease, filter 0.3s ease",
-              transform: selected.includes(car.id) ? "scale(1.2)" : "scale(1)",
+              transition: "transform 0.3s ease",
               zIndex: 10,
             }}
           >
@@ -84,33 +72,31 @@ const Question2: React.FC<Question2Props> = ({ onAnswer }) => {
               src={car.image}
               alt={car.id}
               style={{
-                width: "120px",
-                height: "60px",
-                transition: "all 0.3s ease",
+                width: "100%",
+                height: "100%",
                 filter: selected.includes(car.id)
-                  ? "drop-shadow(0 0 15px rgba(76, 175, 80, 0.9)) drop-shadow(0 0 30px rgba(76, 175, 80, 0.6))"
+                  ? "drop-shadow(0 0 15px rgba(76,175,80,0.9)) drop-shadow(0 0 30px rgba(76,175,80,0.6))"
                   : "drop-shadow(2px 2px 4px rgba(0,0,0,0.5))",
+                transition: "filter 0.3s ease",
               }}
             />
           </div>
         ))}
       </div>
 
-      {/* Selection counter */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: "20px",
-          right: "20px",
-          backgroundColor: "rgba(255, 255, 255, 0.9)",
-          padding: "10px 20px",
-          borderRadius: "10px",
-          fontSize: "1.2rem",
-          fontWeight: "bold",
-          boxShadow: "0 2px 10px rgba(0,0,0,0.3)",
-          zIndex: 20,
-        }}
-      >
+      {/* Counter */}
+      <div style={{
+        position: "absolute",
+        bottom: "20px",
+        right: "20px",
+        backgroundColor: "rgba(255,255,255,0.9)",
+        padding: "10px 20px",
+        borderRadius: "10px",
+        fontSize: "clamp(0.9rem, 3vw, 1.2rem)",
+        fontWeight: "bold",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.3)",
+        zIndex: 20,
+      }}>
         Selected: {selected.length}
       </div>
     </div>

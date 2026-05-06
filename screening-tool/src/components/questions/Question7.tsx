@@ -13,7 +13,7 @@ const Question7: React.FC<Question7Props> = ({ onAnswer }) => {
   };
 
   const boxStyle = (isSelected: boolean) => ({
-    backgroundColor: isSelected ? "#c8e6c9" : "#fefaf2", // light green highlight
+    backgroundColor: isSelected ? "#c8e6c9" : "#fefaf2",
     border: `3px solid ${isSelected ? "#4caf50" : "#ddd"}`,
     boxShadow: isSelected ? "0 0 0 4px #4caf50 inset" : "none",
     borderRadius: "15px",
@@ -30,33 +30,49 @@ const Question7: React.FC<Question7Props> = ({ onAnswer }) => {
   });
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#fefaf2", // matches ScreenBorder theme
-        border: "3px solid #4caf50",
-        borderRadius: "12px",
-        padding: "30px",
-        maxWidth: "700px",
-        margin: "0 auto",
-        boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-      }}
-    >
-      <div style={{ display: "flex", gap: "40px", justifyContent: "center" }}>
-        <div
-          onClick={() => handleSelect("54")}
-          style={boxStyle(selected === "54")}
-        >
-          54
-        </div>
-        <div
-          onClick={() => handleSelect("45")}
-          style={boxStyle(selected === "45")}
-        >
-          45
+    <div>
+      <style>{`
+        .q7-wrapper {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          background-color: #fefaf2;
+          border: 3px solid #4caf50;
+          border-radius: 12px;
+          padding: 30px;
+          max-width: 700px;
+          margin: 0 auto;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .q7-boxes {
+          display: flex;
+          gap: 40px;
+          justify-content: center;
+        }
+
+        @media (max-width: 480px) {
+          .q7-wrapper {
+            padding: 15px;
+          }
+
+          .q7-boxes {
+            gap: 15px;
+            flex-direction: column;
+            align-items: center;
+          }
+        }
+      `}</style>
+
+      <div className="q7-wrapper">
+        <div className="q7-boxes">
+          <div onClick={() => handleSelect("54")} style={boxStyle(selected === "54")}>
+            54
+          </div>
+          <div onClick={() => handleSelect("45")} style={boxStyle(selected === "45")}>
+            45
+          </div>
         </div>
       </div>
     </div>
