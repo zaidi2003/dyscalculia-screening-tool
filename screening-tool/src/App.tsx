@@ -11,7 +11,7 @@ const App: React.FC = () => {
   const [answers, setAnswers] = useState<{ [key: number]: any }>({});
   const [startTime, setStartTime] = useState(Date.now());
   const [timePerQuestion, setTimePerQuestion] = useState<{ [key: number]: number }>({});
-  const [userInfo, setUserInfo] = useState({ name: "", grade: "", age: "" });
+  const [userInfo, setUserInfo] = useState({ name: "", grade: "", age: "", classCode: "" });
   const [predictionResult, setPredictionResult] = useState<{ at_risk: number; probability: number; risk_level: string;} | null>(null);
   const hasSubmitted = React.useRef(false);
 
@@ -44,86 +44,56 @@ const App: React.FC = () => {
     setStartTime(Date.now());
   };
 
-  // const calculateResults = () => {
-  //   const results: { id: number; score: number; time: number }[] = [];
-
-  //   questionsData.forEach((q) => {
-  //     const userAnswer = answers[q.id];
-  //     const correct = q.correct_answer;
-  //     let score = 0;
-
-  //     if (q.type === "binary") {
-  //       if (typeof correct === "number" && typeof userAnswer === "number") {
-  //         score = correct === userAnswer ? 1 : 0;
-  //       } else if (typeof correct === "string" && typeof userAnswer === "string") {
-  //         score = userAnswer.toLowerCase() === correct.toLowerCase() ? 1 : 0;
-  //       }
-  //     } else if (q.type === "deviation") {
-  //       if (typeof correct === "number" && typeof userAnswer === "number") {
-  //         score = correct === userAnswer ? 1 : 0;
-  //       }
-
-  //     }
-
-  //     results.push({
-  //       id: q.id,
-  //       score,
-  //       time: timePerQuestion[q.id] || 0,
-  //     });
-  //   });
-
-  //   return results;
-  // };
   const calculateResults = () => {
-  const results: { id: number; score: number; time: number }[] = [];
+    const results: { id: number; score: number; time: number }[] = [];
 
 
-  questionsData.forEach((q) => {
-    const userAnswer = answers[q.id];
-    const correct = q.correct_answer;
+    questionsData.forEach((q) => {
+      const userAnswer = answers[q.id];
+      const correct = q.correct_answer;
 
-    console.log(`Q${q.id}: type=${q.type}, correct=${correct} (${typeof correct}), user=${userAnswer} (${typeof userAnswer})`);
-    let score = 0;
+      console.log(`Q${q.id}: type=${q.type}, correct=${correct} (${typeof correct}), user=${userAnswer} (${typeof userAnswer})`);
+      let score = 0;
 
-    if (q.type === "binary") {
-      // String comparison (Q5,Q6,Q7,Q8,Q9,Q10,Q11,Q16,Q17,Q18,Q22,Q23,Q24)
-      if (typeof correct === "string" && typeof userAnswer === "string") {
-        score = userAnswer.toLowerCase() === correct.toLowerCase() ? 1 : 0;
-      }
-      // Number comparison (Q3, Q4)
-      else if (typeof correct === "number" && typeof userAnswer === "number") {
-        score = correct === userAnswer ? 1 : 0;
-      }
+      if (q.type === "binary") {
+        // String comparison (Q5,Q6,Q7,Q8,Q9,Q10,Q11,Q16,Q17,Q18,Q22,Q23,Q24)
+        if (typeof correct === "string" && typeof userAnswer === "string") {
+          score = userAnswer.toLowerCase() === correct.toLowerCase() ? 1 : 0;
+        }
+        // Number comparison (Q3, Q4)
+        else if (typeof correct === "number" && typeof userAnswer === "number") {
+          score = correct === userAnswer ? 1 : 0;
+        }
 
-    } else if (q.type === "deviation") {
-      // Q1, Q2: counting — user selects count, correct is exact number
-      // Q12, Q13: number line — user places marker
-      // Q14, Q15: arithmetic — user types answer
-      // Q19, Q20, Q21: money — user types amount
-      if (typeof correct === "number") {
-        const userNum = typeof userAnswer === "string"
-          ? parseFloat(userAnswer)
-          : userAnswer;
+      } else if (q.type === "deviation") {
+        // Q1, Q2: counting — user selects count, correct is exact number
+        // Q12, Q13: number line — user places marker
+        // Q14, Q15: arithmetic — user types answer
+        // Q19, Q20, Q21: money — user types amount
+        if (typeof correct === "number") {
+          const userNum = typeof userAnswer === "string"
+            ? parseFloat(userAnswer)
+            : userAnswer;
 
-        if (typeof userNum === "number" && !isNaN(userNum)) {
-          const error = Math.abs(correct - userNum);
-          const tolerance = correct * 0.1; // 10% tolerance
-          score = error === 0 ? 1 : error <= tolerance ? 0.5 : 0;
-        } else {
-          score = 0;
+          if (typeof userNum === "number" && !isNaN(userNum)) {
+            const error = Math.abs(correct - userNum);
+            const tolerance = correct * 0.1; // 10% tolerance
+            score = error === 0 ? 1 : error <= tolerance ? 0.5 : 0;
+          } else {
+            score = 0;
+          }
         }
       }
-    }
 
-    results.push({
-      id: q.id,
-      score,
-      time: timePerQuestion[q.id] || 0,
+      results.push({
+        id: q.id,
+        score,
+        time: timePerQuestion[q.id] || 0,
+      });
     });
-  });
 
-  return results;
-};
+    return results;
+  };
 
   const submitResultsToFirebase = async () => {
     const results = calculateResults();
@@ -355,10 +325,30 @@ const App: React.FC = () => {
               }}
             />
           </div>
+          <div style={{ marginBottom: "20px" }}>
+          <input
+            type="text"
+            placeholder="Enter your class code"
+            value={userInfo.classCode}
+            onChange={(e) => setUserInfo({ ...userInfo, classCode: e.target.value })}
+            style={{
+              width: "100%",
+              padding: "12px 16px",
+              fontSize: "18px",
+              borderRadius: "8px",
+              border: "2px solid #ccc",
+              outline: "none",
+              textAlign: "center",
+              boxSizing: "border-box",
+              backgroundColor: "#fefefe",
+              color: "#333",
+            }}
+          />
+        </div>
 
           <button
             onClick={goToNext}
-            disabled={!userInfo.name || !userInfo.grade || !userInfo.age}
+            disabled={!userInfo.name || !userInfo.grade || !userInfo.age || !userInfo.classCode}
             style={{
               padding: "12px 24px",
               fontSize: "16px",

@@ -50,7 +50,7 @@ const Dashboard: React.FC = () => {
     try {
       const q = query(
         collection(db, "results"),
-        where("userInfo.name", "==", "ali")
+        where("userInfo.classCode", "==", "0000")
       );
       const snapshot = await getDocs(q);
       const data: StudentRecord[] = snapshot.docs.map((doc) => ({
