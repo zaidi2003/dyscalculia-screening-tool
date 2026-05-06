@@ -10,7 +10,7 @@ interface Result {
 
 interface StudentRecord {
   docId: string;
-  userInfo: { name: string; grade: string; age: string };
+  userInfo: { name: string; grade: string; age: string; classCode: string };
   results: Result[];
   timestamp: string;
   riskLevel?: string;
@@ -29,6 +29,7 @@ const riskColors: Record<string, { bg: string; border: string; badge: string }> 
 
 const Dashboard: React.FC = () => {
   const [input, setInput] = useState("");
+  const [classCode, setClassCode] = useState("");
   const [unlocked, setUnlocked] = useState(false);
   const [error, setError] = useState("");
   const [records, setRecords] = useState<StudentRecord[]>([]);
@@ -37,20 +38,21 @@ const Dashboard: React.FC = () => {
 
   const handleLogin = () => {
     if (input === CODE) {
+      setClassCode(input);
       setUnlocked(true);
       setError("");
-      fetchRecords();
+      fetchRecords(input);
     } else {
       setError("Incorrect code. Try again.");
     }
   };
 
-  const fetchRecords = async () => {
+  const fetchRecords = async (code: string) => {
     setLoading(true);
     try {
       const q = query(
         collection(db, "results"),
-        where("userInfo.classCode", "==", "0000")
+        where("userInfo.classCode", "==", code)
       );
       const snapshot = await getDocs(q);
       const data: StudentRecord[] = snapshot.docs.map((doc) => ({
@@ -78,7 +80,6 @@ const Dashboard: React.FC = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-
         }}
       >
         <div
@@ -148,7 +149,6 @@ const Dashboard: React.FC = () => {
     <div
       style={{
         minHeight: "100vh",
-
         padding: "32px 24px",
         boxSizing: "border-box",
       }}
@@ -170,11 +170,11 @@ const Dashboard: React.FC = () => {
               Results Dashboard
             </h1>
             <p style={{ margin: "4px 0 0", color: "#666", fontSize: "14px" }}>
-              Showing all records for <strong>Ali</strong>
+              Showing all records for class <strong>{classCode}</strong>
             </p>
           </div>
           <button
-            onClick={fetchRecords}
+            onClick={() => fetchRecords(classCode)}
             style={{
               padding: "10px 18px",
               borderRadius: "8px",
@@ -196,7 +196,7 @@ const Dashboard: React.FC = () => {
           </div>
         ) : records.length === 0 ? (
           <div style={{ textAlign: "center", color: "#888", marginTop: "60px" }}>
-            No records found for Ali.
+            No records found for class <strong>{classCode}</strong>.
           </div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
@@ -282,6 +282,7 @@ const Dashboard: React.FC = () => {
                       >
                         <InfoItem label="Grade" value={rec.userInfo.grade} />
                         <InfoItem label="Age" value={rec.userInfo.age} />
+                        <InfoItem label="Class Code" value={rec.userInfo.classCode} />
                         <InfoItem
                           label="Total Score"
                           value={`${totalScore(rec.results).toFixed(1)} / ${rec.results.length}`}
