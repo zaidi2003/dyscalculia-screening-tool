@@ -17,7 +17,7 @@ const Question24: React.FC<Question24Props> = ({ onAnswer }) => {
   const [availableNumbers, setAvailableNumbers] = useState(numbers);
   const [selectedNum, setSelectedNum] = useState<number | null>(null); // mobile only
 
-  const isMobile = typeof window !== "undefined" && window.innerWidth <= 480;
+  // const isMobile = typeof window !== "undefined" && window.innerWidth <= 480;
 
   // ── PC: drag handlers (unchanged) ──────────────────────────────────────────
   const handleDragStart = (e: React.DragEvent, num: number, source: string) => {
