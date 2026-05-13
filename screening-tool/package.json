@@ -17,7 +17,8 @@
   "dependencies": {
     "firebase": "^12.5.0",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.15.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
@@ -50,16 +51,17 @@
       "main.js",
       "package.json"
     ],
-
     "win": {
-    "icon": "public/icon.ico",
-    "target": [
-      {
-        "target": "nsis",
-        "arch": ["x64"] 
-      }
-    ]
-  },
+      "icon": "public/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
     "mac": {
       "target": "dmg"
     }

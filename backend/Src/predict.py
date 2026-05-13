@@ -15,6 +15,19 @@ with open(os.path.join(BASE_DIR, 'Model', 'scaler.pkl'), 'rb') as f:
 
 FEATURE_ORDER = model.feature_names_in_.tolist()
 
+# class label mapping
+RISK_LABELS = {
+    0: 'No Risk',
+    1: 'Moderate Risk',
+    2: 'Severe Risk'
+}
+
+RISK_DESCRIPTIONS = {
+    0: 'No significant indicators of dyscalculia detected.',
+    1: 'Some indicators of dyscalculia present. Further evaluation advised.',
+    2: 'Strong indicators of dyscalculia detected. Immediate assessment recommended.'
+}
+
 def predict(
     scores: dict,
     response_times: dict,
@@ -39,7 +52,7 @@ def predict(
     # engineer features
     features = engineer_features(
         scores, time_scores, grade, age,
-        teacher_perception, enjoyment, 
+        teacher_perception, enjoyment,
         feeling, performance_gap
     )
     
@@ -47,15 +60,25 @@ def predict(
     X = pd.DataFrame([features])[FEATURE_ORDER]
     
     # scale
-    X_scaled = scaler.transform(X)
+    X_scaled = pd.DataFrame(scaler.transform(X),columns=X.columns)
     
-    # predict
-    prediction = model.predict(X_scaled)[0]
-    probability = model.predict_proba(X_scaled)[0][1]
+    # predict class and probabilities
+    prediction = int(model.predict(X_scaled)[0])
+    probabilities = model.predict_proba(X_scaled)[0]
+    
+    # get probability for each class
+    prob_no_risk = round(float(probabilities[0]) * 100, 2)
+    prob_moderate = round(float(probabilities[1]) * 100, 2)
+    prob_severe = round(float(probabilities[2]) * 100, 2)
     
     return {
-        'at_risk': int(prediction),
-        'probability': round(float(probability) * 100, 2),
-        'risk_level': 'High' if probability > 0.7 else 
-                      'Medium' if probability > 0.4 else 'Low'
+        'risk_class': prediction,
+        'risk_label': RISK_LABELS[prediction],
+        'description': RISK_DESCRIPTIONS[prediction],
+        'probabilities': {
+            'no_risk': prob_no_risk,
+            'moderate_risk': prob_moderate,
+            'severe_risk': prob_severe
+        },
+        'confidence': round(float(probabilities[prediction]) * 100, 2)
     }

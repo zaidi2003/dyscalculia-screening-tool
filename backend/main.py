@@ -44,9 +44,11 @@ class ScreeningRequest(BaseModel):
     feeling: int = Field(..., ge=1, le=5)
 
 class ScreeningResponse(BaseModel):
-    at_risk: int
-    probability: float
-    risk_level: str
+    risk_class: int
+    risk_label: str
+    description: str
+    probabilities: dict
+    confidence: float
 
 @app.get('/')
 def root():

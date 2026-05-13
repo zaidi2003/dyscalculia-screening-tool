@@ -1,12 +1,12 @@
 import React from "react";
 
 interface ScreenBorderProps {
-  question: React.ReactNode;          // ✅ Header content
+  question: React.ReactNode;          
   children: React.ReactNode;
   borderColor?: string;               // Optional border color
   headerColor?: string;               // Optional header background
   backgroundColor?: string;           // Optional background color
-  scrollable?: boolean;               // ✅ New prop for scrollable mode
+  scrollable?: boolean;               
 }
 
 const ScreenBorder: React.FC<ScreenBorderProps> = ({
