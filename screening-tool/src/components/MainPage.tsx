@@ -216,7 +216,7 @@ const MainPage: React.FC = () => {
           <div style={{ marginBottom: "20px" }}>
             <input
               type="text"
-              placeholder="Enter your name"
+              placeholder="Full name"
               value={userInfo.name}
               onChange={(e) => setUserInfo({ ...userInfo, name: e.target.value })}
               style={{
@@ -236,7 +236,7 @@ const MainPage: React.FC = () => {
           <div style={{ marginBottom: "20px" }}>
             <input
               type="text"
-              placeholder="Enter your grade"
+              placeholder="Grade"
               min={1}
               max={3}
               value={userInfo.grade}
@@ -258,7 +258,7 @@ const MainPage: React.FC = () => {
           <div style={{ marginBottom: "20px" }}>
             <input
               type="text"
-              placeholder="Enter your age"
+              placeholder="Age"
               min={5}
               max={12}
               value={userInfo.age}
@@ -280,7 +280,7 @@ const MainPage: React.FC = () => {
           <div style={{ marginBottom: "20px" }}>
           <input
             type="text"
-            placeholder="Enter your class code"
+            placeholder="Class code"
             value={userInfo.classCode}
             onChange={(e) => setUserInfo({ ...userInfo, classCode: e.target.value })}
             style={{
@@ -311,7 +311,7 @@ const MainPage: React.FC = () => {
               cursor: "pointer",
             }}
           >
-            Start Test ➡
+            Start Test 
           </button>
         </div>
       </ScreenBorder>
@@ -363,9 +363,8 @@ if (currentIndex >= questions.length) {
       {/* Next button */}
       <div style={{ position: "absolute", bottom: "50px", right: "50px" }}>
         <button
-            // onClick={answered ? goToNext : undefined}
-            onClick={goToNext}
-            // disabled={!answered}
+            onClick={answered ? goToNext : undefined}
+            disabled={!answered}
             style={{
               background: "none",
               border: "none",

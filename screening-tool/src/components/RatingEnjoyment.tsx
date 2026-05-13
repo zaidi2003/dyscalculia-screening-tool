@@ -34,7 +34,7 @@ const RatingEnjoyment: React.FC<RatingEnjoymentProps> = ({ onAnswer }) => {
       }}
     >
       <p style={{ fontSize: "22px", fontWeight: "bold", marginBottom: "10px" }}>
-        Rate your experience
+        How much did you enjoy the activity?
       </p>
 
       <div style={{ display: "flex", gap: "20px" }}>

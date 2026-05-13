@@ -34,7 +34,7 @@ const RatingFeeling: React.FC<RatingFeelingProps> = ({ onAnswer }) => {
       }}
     >
       <p style={{ fontSize: "22px", fontWeight: "bold", marginBottom: "10px" }}>
-        Rate your experience
+        How are you feeling after completing the activity?
       </p>
 
       <div style={{ display: "flex", gap: "20px" }}>

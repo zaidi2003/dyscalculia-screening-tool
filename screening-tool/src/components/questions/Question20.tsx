@@ -24,6 +24,17 @@ const Question20: React.FC<Question20Props> = ({ onAnswer }) => {
           margin: 0 auto;
         }
 
+        /* REMOVE NUMBER ARROWS */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+
+        input[type=number] {
+          -moz-appearance: textfield;
+        }
+
         .q20-coins {
           display: flex;
           justify-content: center;
