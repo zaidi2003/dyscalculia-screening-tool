@@ -12,8 +12,3 @@ uvicorn
 pydantic
 scikit-learn
 statsmodels
-xgboost
-pickle
-warnings
-os
-sys
