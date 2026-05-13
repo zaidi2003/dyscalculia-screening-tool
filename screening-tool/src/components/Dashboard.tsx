@@ -28,7 +28,7 @@ interface PredictResponse {
   confidence: number;
 }
 
-const API_URL = "http://localhost:8000";
+const API_URL = "https://dyscalculia-screening-tool.onrender.com";
 
 const riskColors: Record<string, { bg: string; border: string; badge: string }> = {
   "No Risk":       { bg: "#f1f8e9", border: "#4caf50", badge: "#4caf50" },
