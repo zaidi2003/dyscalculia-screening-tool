@@ -3,6 +3,7 @@ import ScreenBorder from "./ScreenBorder";
 import { questionsData } from "./questions";
 import { db } from "../firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
+import BalloonPopGame from "./BaloonPopGame";
 
 const MainPage: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(-1);
@@ -330,8 +331,9 @@ if (currentIndex >= questions.length) {
   return (
     <ScreenBorder question="🎉 All Done!">
       <div style={{ textAlign: "center", maxWidth: "400px", margin: "40px auto" }}>
-        <h2>Thank you for completing the screening!</h2>
+        <h2>Congratulations {userInfo.name}, on completing the screening!</h2>
       </div>
+      <BalloonPopGame />
     </ScreenBorder>
   );
 }
