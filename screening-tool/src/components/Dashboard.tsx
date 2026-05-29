@@ -30,6 +30,8 @@ interface PredictResponse {
 
 const API_URL = "https://dyscalculia-screening-tool.onrender.com";
 
+//const API_URL = "127,0,0,1:8000"; // Local testing URL
+
 const riskColors: Record<string, { bg: string; border: string; badge: string }> = {
   "No Risk":       { bg: "#f1f8e9", border: "#4caf50", badge: "#4caf50" },
   "Moderate Risk": { bg: "#fffde7", border: "#fb8c00", badge: "#fb8c00" },
@@ -311,55 +313,134 @@ const Dashboard: React.FC = () => {
 
           {/* Teacher inputs */}
           {hasAnyMissing && !pred && !isPredicting && (
-            <div style={{ backgroundColor: "#fff", borderRadius: "12px", padding: "16px 20px", marginBottom: "24px", boxShadow: "0 1px 4px rgba(0,0,0,0.06)", border: "1px solid #e0e0e0" }}>
-              <div style={{ fontSize: "13px", fontWeight: 700, color: "#444", marginBottom: "14px" }}>Teacher Input Required</div>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "16px", alignItems: "flex-end" }}>
-                {needsTeacher && (
-                  <div>
-                    <label style={{ display: "block", fontSize: "11px", color: "#999", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "6px" }}>Teacher Perception (0–1)</label>
-                    <input type="number" min={0} max={1} placeholder="0–1"
-                      value={getInputVal(rec.docId, "teacher_perception")}
-                      onChange={(e) => setInputVal(rec.docId, "teacher_perception", e.target.value)}
-                      onClick={(e) => e.stopPropagation()}
-                      style={{ width: "80px", padding: "8px 10px", fontSize: "14px", fontWeight: 700, borderRadius: "8px", border: "2px solid #ddd", outline: "none", textAlign: "center" }}
-                    />
-                  </div>
-                )}
-                {needsMath && (
-                  <div>
-                    <label style={{ display: "block", fontSize: "11px", color: "#999", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "6px" }}>Math Performance (0–5)</label>
-                    <input type="number" min={0} max={5} placeholder="0–5"
-                      value={getInputVal(rec.docId, "math_performance")}
-                      onChange={(e) => setInputVal(rec.docId, "math_performance", e.target.value)}
-                      onClick={(e) => e.stopPropagation()}
-                      style={{ width: "80px", padding: "8px 10px", fontSize: "14px", fontWeight: 700, borderRadius: "8px", border: "2px solid #ddd", outline: "none", textAlign: "center" }}
-                    />
-                  </div>
-                )}
-                {needsOther && (
-                  <div>
-                    <label style={{ display: "block", fontSize: "11px", color: "#999", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "6px" }}>Other Performance (0–5)</label>
-                    <input type="number" min={0} max={5} placeholder="0–5"
-                      value={getInputVal(rec.docId, "other_performance")}
-                      onChange={(e) => setInputVal(rec.docId, "other_performance", e.target.value)}
-                      onClick={(e) => e.stopPropagation()}
-                      style={{ width: "80px", padding: "8px 10px", fontSize: "14px", fontWeight: 700, borderRadius: "8px", border: "2px solid #ddd", outline: "none", textAlign: "center" }}
-                    />
-                  </div>
-                )}
+  <div style={{ backgroundColor: "#fff", borderRadius: "12px", padding: "16px 20px", marginBottom: "24px", boxShadow: "0 1px 4px rgba(0,0,0,0.06)", border: "1px solid #e0e0e0" }}>
+    <div style={{ fontSize: "13px", fontWeight: 700, color: "#444", marginBottom: "14px" }}>Teacher Input Required</div>
+    <div style={{ display: "flex", flexWrap: "wrap", gap: "20px", alignItems: "flex-end" }}>
+
+      {needsTeacher && (
+        <div>
+          <label style={{ display: "block", fontSize: "11px", color: "#999", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "8px" }}>
+            Teacher Perception
+          </label>
+          <div style={{ display: "flex", gap: "8px" }}>
+            {([{ label: "Good", value: "1" }, { label: "Bad", value: "0" }] as { label: string; value: string }[]).map(({ label, value }) => {
+              const selected = getInputVal(rec.docId, "teacher_perception") === value;
+              return (
                 <button
-                  onClick={(e) => { e.stopPropagation(); handleSubmit(rec); }}
-                  disabled={isPredicting}
-                  style={{ padding: "8px 20px", backgroundColor: "#2e5939", color: "#fff", border: "none", borderRadius: "8px", fontSize: "13px", fontWeight: 700, cursor: isPredicting ? "not-allowed" : "pointer", height: "36px", opacity: isPredicting ? 0.7 : 1 }}
+                  key={value}
+                  onClick={(e) => { e.stopPropagation(); setInputVal(rec.docId, "teacher_perception", value); }}
+                  style={{
+                    padding: "8px 18px",
+                    borderRadius: "8px",
+                    border: `2px solid ${selected ? (value === "1" ? "#4caf50" : "#e53935") : "#ddd"}`,
+                    backgroundColor: selected ? (value === "1" ? "#e8f5e9" : "#ffebee") : "#fff",
+                    color: selected ? (value === "1" ? "#2e7d32" : "#c62828") : "#555",
+                    fontWeight: selected ? 700 : 400,
+                    fontSize: "13px",
+                    cursor: "pointer",
+                    transition: "all 0.15s",
+                  }}
                 >
-                  Submit
+                  {label}
                 </button>
-              </div>
-              {submitError[rec.docId] && (
-                <div style={{ marginTop: "10px", fontSize: "12px", color: "#e53935" }}>{submitError[rec.docId]}</div>
-              )}
-            </div>
-          )}
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {needsMath && (
+        <div>
+          <label style={{ display: "block", fontSize: "11px", color: "#999", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "8px" }}>
+            Math Performance
+          </label>
+          <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+            {([
+              { label: "Very Poor", value: "0", color: "#e53935" },
+              { label: "Poor",      value: "1", color: "#fb8c00" },
+              { label: "Average",   value: "2", color: "#f9a825" },
+              { label: "Good",      value: "3", color: "#7cb342" },
+              { label: "Very Good", value: "4", color: "#2e7d32" },
+            ] as { label: string; value: string; color: string }[]).map(({ label, value, color }) => {
+              const selected = getInputVal(rec.docId, "math_performance") === value;
+              return (
+                <button
+                  key={value}
+                  onClick={(e) => { e.stopPropagation(); setInputVal(rec.docId, "math_performance", value); }}
+                  style={{
+                    padding: "7px 12px",
+                    borderRadius: "8px",
+                    border: `2px solid ${selected ? color : "#ddd"}`,
+                    backgroundColor: selected ? `${color}18` : "#fff",
+                    color: selected ? color : "#555",
+                    fontWeight: selected ? 700 : 400,
+                    fontSize: "12px",
+                    cursor: "pointer",
+                    transition: "all 0.15s",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {needsOther && (
+        <div>
+          <label style={{ display: "block", fontSize: "11px", color: "#999", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "8px" }}>
+            Other Performance
+          </label>
+          <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+            {([
+              { label: "Very Poor", value: "0", color: "#e53935" },
+              { label: "Poor",      value: "1", color: "#fb8c00" },
+              { label: "Average",   value: "2", color: "#f9a825" },
+              { label: "Good",      value: "3", color: "#7cb342" },
+              { label: "Very Good", value: "4", color: "#2e7d32" },
+            ] as { label: string; value: string; color: string }[]).map(({ label, value, color }) => {
+              const selected = getInputVal(rec.docId, "other_performance") === value;
+              return (
+                <button
+                  key={value}
+                  onClick={(e) => { e.stopPropagation(); setInputVal(rec.docId, "other_performance", value); }}
+                  style={{
+                    padding: "7px 12px",
+                    borderRadius: "8px",
+                    border: `2px solid ${selected ? color : "#ddd"}`,
+                    backgroundColor: selected ? `${color}18` : "#fff",
+                    color: selected ? color : "#555",
+                    fontWeight: selected ? 700 : 400,
+                    fontSize: "12px",
+                    cursor: "pointer",
+                    transition: "all 0.15s",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      <button
+        onClick={(e) => { e.stopPropagation(); handleSubmit(rec); }}
+        disabled={isPredicting}
+        style={{ padding: "8px 20px", backgroundColor: "#2e5939", color: "#fff", border: "none", borderRadius: "8px", fontSize: "13px", fontWeight: 700, cursor: isPredicting ? "not-allowed" : "pointer", height: "36px", opacity: isPredicting ? 0.7 : 1, alignSelf: "flex-end" }}
+      >
+        Submit
+      </button>
+    </div>
+
+    {submitError[rec.docId] && (
+      <div style={{ marginTop: "10px", fontSize: "12px", color: "#e53935" }}>{submitError[rec.docId]}</div>
+    )}
+  </div>
+)}
 
           {/* Spinner */}
           {isPredicting && (
