@@ -320,10 +320,10 @@ const Dashboard: React.FC = () => {
       {needsTeacher && (
         <div>
           <label style={{ display: "block", fontSize: "11px", color: "#999", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "8px" }}>
-            Teacher Perception
+            Struggles in Math?
           </label>
           <div style={{ display: "flex", gap: "8px" }}>
-            {([{ label: "Good", value: "1" }, { label: "Bad", value: "0" }] as { label: string; value: string }[]).map(({ label, value }) => {
+            {([{ label: "Yes", value: "1" }, { label: "No", value: "0" }] as { label: string; value: string }[]).map(({ label, value }) => {
               const selected = getInputVal(rec.docId, "teacher_perception") === value;
               return (
                 <button
@@ -356,11 +356,11 @@ const Dashboard: React.FC = () => {
           </label>
           <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
             {([
-              { label: "Very Poor", value: "0", color: "#e53935" },
-              { label: "Poor",      value: "1", color: "#fb8c00" },
-              { label: "Average",   value: "2", color: "#f9a825" },
-              { label: "Good",      value: "3", color: "#7cb342" },
-              { label: "Very Good", value: "4", color: "#2e7d32" },
+              { label: "Very Poor", value: "1", color: "#e53935" },
+              { label: "Poor",      value: "2", color: "#fb8c00" },
+              { label: "Average",   value: "3", color: "#f9a825" },
+              { label: "Good",      value: "4", color: "#7cb342" },
+              { label: "Very Good", value: "5", color: "#2e7d32" },
             ] as { label: string; value: string; color: string }[]).map(({ label, value, color }) => {
               const selected = getInputVal(rec.docId, "math_performance") === value;
               return (
@@ -395,11 +395,11 @@ const Dashboard: React.FC = () => {
           </label>
           <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
             {([
-              { label: "Very Poor", value: "0", color: "#e53935" },
-              { label: "Poor",      value: "1", color: "#fb8c00" },
-              { label: "Average",   value: "2", color: "#f9a825" },
-              { label: "Good",      value: "3", color: "#7cb342" },
-              { label: "Very Good", value: "4", color: "#2e7d32" },
+              { label: "Very Poor", value: "1", color: "#e53935" },
+              { label: "Poor",      value: "2", color: "#fb8c00" },
+              { label: "Average",   value: "3", color: "#f9a825" },
+              { label: "Good",      value: "4", color: "#7cb342" },
+              { label: "Very Good", value: "5", color: "#2e7d32" },
             ] as { label: string; value: string; color: string }[]).map(({ label, value, color }) => {
               const selected = getInputVal(rec.docId, "other_performance") === value;
               return (
