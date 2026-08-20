@@ -3,6 +3,9 @@ Dyscalculia Screening Tool is an accessible application developed as part of my 
 
 ![tutorial_short](https://github.com/user-attachments/assets/5138f515-ec3a-4a84-8bcd-87e107e85e75)
 
+<img width="7680" height="4320" alt="dashboard" src="https://github.com/user-attachments/assets/604f0ccf-fc8b-472c-9c45-54c4fbc1d90c" />
+
+
 
 # Correlation Matrix of Features
 
